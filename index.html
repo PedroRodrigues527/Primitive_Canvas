@@ -26,31 +26,144 @@
       
    </head>
    <body>
-      <table>
-         <tr>
-            <td>
-               <canvas id="gl-canvas" width="512" height="512">
-                  Sorry, but your browser does not support HTML5's canvas element.
-               </canvas>
-            </td>
-            <td>
-               <h1>Cube transformations</h1>
-               <h3>Rotations</h3>
-               <input type="radio" name="rotation_transform" value="1" id="x_rotation">
-               <label>X rotation</label>
-               
-               <input type="radio" name="rotation_transform" value="2" id="y_rotation">
-               <label>Y rotation</label>
-               
-               <input type="radio" name="rotation_transform" value="3" id="z_rotation">
-               <label>Z rotation</label>   
-               <br>
-            <input type="number" id="angle"><br>
-            <button id="rotate-btn">Apply Rotation</button>
+   <div style="display: inline-flex">
+      <div style="width: 512px;height: 512px;" >
 
-            </td>
-         </tr>
-      </table>
+         <canvas id="gl-canvas" width="512" height="512" style="border-style: solid; border-color:black;">
+            Sorry, but your browser does not support HTML5's canvas element.
+         </canvas>
+         <div style="display: inline-flex;margin-top: 5px; ">
+            <div style="align-items: start;">
+               <label for="form-names">Adicionar fonte de luz </label>
+               <select name="light-type" id="light-type">
+                  <option value="type1">Tipo1</option>
+                  <option value="type2">Tipo2</option>
+                  <option value="type2">Tipo3</option>
+               </select>
+               <br>
+      
+               <label>Direção:</label><br>
+               <label>X:</label>
+               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation">
+               <label>Y:</label>
+               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation">
+               <label>Z:</label>
+               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation">
+               <br>
+      
+               <label>Intensidade:</label><br>
+               <label>R:</label>
+               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation"><br>
+               <label>G:</label>
+               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation"><br>
+               <label>B:</label>
+               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation"><br>
+               <br>
+               <div style="text-align: right;">
+                  <button id="rotate-btn" style="align-items: right;">Adicionar</button> 
+               </div><br>
+      
+            </div>
+            <div style="align-items: end;">
+               <label for="form-names">Selecionar Objeto: </label>
+               <select name="Obj-type" id="Obj-type">
+                  <option value="obj1">Cubo1</option>
+                  <option value="obj2">Cubo2</option>
+                  <option value="obj3">Cubo3</option>
+               </select><br>
+      
+               <label>Rotação X</label>
+               <input type="number" name="rotation_transform" value="1" id="x_rotation"><br>
+               <label>Rotação Y</label>
+               <input type="number" name="rotation_transform" value="1" id="x_rotation"><br>
+               <label>Rotação Z</label>
+               <input type="number" name="rotation_transform" value="1" id="x_rotation"><br>
+               <br>
+            
+               <div style="display: inline-flex;">
+                  <button id="rotate-btn">Animar Objeto</button><br>
+                  <button id="rotate-btn">Terminar Animação</button> 
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div style="margin-left: 10px;">
+         <label for="form-names">Adicionar Primitiva </label>
+         <select name="form-names" id="form-names">
+            <option value="cube">Cubo</option>
+            <option value="dave">Pirâmide triangular</option>
+         </select>
+         <br>
+         <div style="display: inline-flex;">
+            <div>
+               <label for="form-names">Cor: </label><br>
+               <select name="form-names" id="form-names">
+                  <option value="face1">Face 1</option>
+                  <option value="face2">Face 2</option>
+                  <option value="face3">Face 3</option>
+                  <option value="face4">Face 4</option>
+                  <option value="face5">Face 5</option>
+                  <option value="face6">Face 6</option>
+               </select>
+               <br>         
+               <br>
+            </div>
+            <div>
+               <br>         
+               <button id="rotate-btn">Carregar Textura</button><br>
+               <button id="rotate-btn">Adicionar Primitiva</button> 
+               <br><br>
+            </div>
+         </div>
+         
+         <h3>Adicionar Modelo</h3>
+         <div style="display: inline-flex;">
+            <button id="rotate-btn">Carregar Modelo</button><br>
+            <button id="rotate-btn">Carregar Textura</button> 
+         </div>
+         <br><br>
+         <div style="text-align: right;">
+            <button id="rotate-btn" style="align-items: right;">Adicionar Modelo</button> 
+         </div>
+         
+
+         <h3>Manipular Objeto</h3>
+         <h3>Selecionar Objeto: ALGO</h3>
+         <label>Scalling X</label>
+         <input type="number" name="rotation_transform" value="1" id="x_rotation">
+         <br>
+         
+         <label>Scalling Y</label>
+         <input type="number" name="rotation_transform" value="2" id="y_rotation">
+         <br>
+         
+         <label>Scalling Z</label>
+         <input type="number" name="rotation_transform" value="3" id="z_rotation">
+         <br><br>
+
+         <label>Translação X</label>
+         <input type="number" name="rotation_transform" value="1" id="x_rotation">
+         <br>
+         
+         <label>Translação Y</label>
+         <input type="number" name="rotation_transform" value="2" id="y_rotation">
+         <br>
+         
+         <label>Translação Z</label>
+         <input type="number" name="rotation_transform" value="3" id="z_rotation">
+         <br>
+            
+         <br>
+   
+         <button id="rotate-btn">Carregar Textura</button> 
+         <button id="rotate-btn">Aplicar Transformação</button> 
+         <br><br>
+         <div style="text-align: right;">
+            <button id="rotate-btn" style="align-items: right;">Cancelar</button> 
+         </div>
+      </div>
+   </div>
       
       <script src="js/initShaders.js"></script>
       <script src="js/gl-matrix-min.js"></script>
