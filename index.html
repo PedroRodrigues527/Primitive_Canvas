@@ -1,0 +1,60 @@
+<html>
+   <head>
+      <script id="vertex-shader" type="x-shader/x-vertex">
+         precision mediump float;
+
+         attribute vec3 vPosition;
+         attribute vec3 vColor;
+         varying vec3 fColor;
+         uniform mat4 modelViewMatrix;
+         void main() {
+            fColor = vColor;
+            gl_Position = modelViewMatrix * vec4(vPosition, 1.0);
+         }
+      </script>
+      <script id="fragment-shader" type="x-shader/x-fragment">
+         precision mediump float;
+
+         varying vec3 fColor;
+         
+         void main()
+         {
+           gl_FragColor = vec4(fColor, 1.0);;
+         }
+      </script>
+
+      
+   </head>
+   <body>
+      <table>
+         <tr>
+            <td>
+               <canvas id="gl-canvas" width="512" height="512">
+                  Sorry, but your browser does not support HTML5's canvas element.
+               </canvas>
+            </td>
+            <td>
+               <h1>Cube transformations</h1>
+               <h3>Rotations</h3>
+               <input type="radio" name="rotation_transform" value="1" id="x_rotation">
+               <label>X rotation</label>
+               
+               <input type="radio" name="rotation_transform" value="2" id="y_rotation">
+               <label>Y rotation</label>
+               
+               <input type="radio" name="rotation_transform" value="3" id="z_rotation">
+               <label>Z rotation</label>   
+               <br>
+            <input type="number" id="angle"><br>
+            <button id="rotate-btn">Apply Rotation</button>
+
+            </td>
+         </tr>
+      </table>
+      
+      <script src="js/initShaders.js"></script>
+      <script src="js/gl-matrix-min.js"></script>
+      <script src="js/app.js"></script>
+
+   </body>
+</html>
