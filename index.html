@@ -1,5 +1,8 @@
-<html>
+<html lang="pt">
    <head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
       <script id="vertex-shader" type="x-shader/x-vertex">
          precision mediump float;
 
@@ -23,97 +26,101 @@
          }
       </script>
 
-      
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
    </head>
    <body>
-   <div style="display: inline-flex">
-      <div style="width: 600px;height: 600px;" >
 
-         <canvas id="gl-canvas" width="600" height="600" style="border-style: solid; border-color:black;">
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+   <div style="display: inline-flex" class="ms-2 mt-2">
+      <div style="width: 600px; height: 600px;" >
+
+         <canvas id="gl-canvas" width="600" height="600" class="border border-2 border-dark rounded-1">
             Sorry, but your browser does not support HTML5's canvas element.
          </canvas>
-         <div style="display: inline-flex;margin-top: 5px; ">
-            <div style="align-items: start; border: 1px solid darkblue; border-radius: 10px;">
-               <label for="form-names">Adicionar fonte de luz </label>
-               <select name="light-type" id="light-type">
+         <div style="display: inline-flex" class="mt-4">
+            <div style="align-items: start" class="border border-1 rounded-1 ms-3 ps-1">
+               <h5>Adicionar fonte de luz</h5>
+               <select name="light-type" id="light-type" class="form-select ">
                   <option value="type1">Tipo1</option>
                   <option value="type2">Tipo2</option>
-                  <option value="type2">Tipo3</option>
+                  <option value="type3">Tipo3</option>
                </select>
-               <br>
-      
-               <label>DireÃ§Ã£o:</label><br>
+
+               <h6 class="mt-2 fw-bold">Direção</h6>
                <label>X:</label>
-               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation">
+               <input type="number" style="width: 60px;" name="direction-x" id="direction-x">
                <label>Y:</label>
-               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation">
+               <input type="number" style="width: 60px;" name="direction-y" id="direction-y">
                <label>Z:</label>
-               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation">
+               <input type="number" style="width: 60px;" name="direction-z" id="direction-z">
                <br>
       
-               <label>Intensidade:</label><br>
+               <h6 class="fw-bold mt-2">Intensidade</h6>
                <label>R:</label>
-               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation"><br>
+               <input type="number" style="width: 60px;" name="intensity-x" id="intensity-x">
                <label>G:</label>
-               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation"><br>
+               <input type="number" style="width: 60px;" name="intensity-y" id="intensity-y">
                <label>B:</label>
-               <input type="number" style="width: 35px;" name="rotation_transform" value="1" id="x_rotation"><br>
+               <input type="number" style="width: 60px;" name="intensity-z" id="intensity-z">
                <br>
-               <div style="text-align: right;">
-                  <button id="rotate-btn" style="align-items: right;">Adicionar</button> 
+               <div style="text-align: right;" class="mt-2">
+                  <button id="btn-add-light" style="align-items: flex-end;" class="btn btn-primary border border-1 border-dark me-1">Adicionar</button>
                </div><br>
       
             </div>
-            <div style="align-items: end; margin-left: 10px; border: 1px solid darkblue; border-radius: 10px;">
-               <label for="form-names">Selecionar Objeto: </label>
-               <select name="Obj-type" id="Obj-type">
-                  <option value="obj1">Cubo1</option>
-                  <option value="obj2">Cubo2</option>
-                  <option value="obj3">Cubo3</option>
-               </select><br>
+            <div style="align-items: end" class="border border-1 rounded-1 ms-3 ps-1">
+               <h5>Seleccionar Objeto:</h5>
+               <select name="object-type" id="object-type" class="form-select">
+                  <option value="cubo-1">Cubo 1</option>
+                  <option value="cubo-2">Cubo 2</option>
+                  <option value="cubo-3">Cubo 3</option>
+               </select>
       
-               <label>RotaÃ§Ã£o X</label>
-               <input type="number" name="rotation_transform" value="1" id="x_rotation"><br>
-               <label>RotaÃ§Ã£o Y</label>
-               <input type="number" name="rotation_transform" value="1" id="x_rotation"><br>
-               <label>RotaÃ§Ã£o Z</label>
-               <input type="number" name="rotation_transform" value="1" id="x_rotation"><br>
+               <label class="mt-4 fw-bold">Rotação X</label>
+               <input type="number" name="rotation-x" id="rotation-x"><br>
+               <label class="mt-1 fw-bold">Rotação Y</label>
+               <input type="number" name="rotation-y" id="rotation-y"><br>
+               <label class="mt-1 fw-bold">Rotação Z</label>
+               <input type="number" name="rotation-z" id="rotation-z"><br>
                <br>
             
                <div style="display: inline-flex;">
-                  <button id="rotate-btn">Animar Objeto</button><br>
-                  <button id="rotate-btn">Terminar AnimaÃ§Ã£o</button> 
+                  <button id="btn-start-animate" class="btn btn-primary border border-1 border-dark">Animar Objeto</button>
+                  <button id="btn-end-animate" class="btn btn-primary border border-1 border-dark ms-3 me-1">Terminar Animação</button>
                </div>
             </div>
          </div>
       </div>
 
-      <div style="margin-left: 10px;">
-         <label for="form-names">Adicionar Primitiva </label>
-         <select name="form-names" id="form-names">
-            <option value="cube">Cubo</option>
-            <option value="dave">PirÃ¢mide triangular</option>
-         </select>
-         <br>
-         <div style="display: inline-flex;">
-            <div>
-               <label for="form-names">Cor: </label><br>
-               <select name="form-names" id="form-names">
-                  <option value="face1">Face 1</option>
-                  <option value="face2">Face 2</option>
-                  <option value="face3">Face 3</option>
-                  <option value="face4">Face 4</option>
-                  <option value="face5">Face 5</option>
-                  <option value="face6">Face 6</option>
-               </select>
-               <br>         
-               <br>
-            </div>
-            <div>
-               <br>         
-               <button id="rotate-btn">Carregar Textura</button><br>
-               <button id="rotate-btn">Adicionar Primitiva</button> 
-               <br><br>
+      <div class="ms-5">
+            <div class="border border-1 ps-1">
+            <label for="form-names">Adicionar Primitiva </label>
+            <select name="form-names" id="form-names">
+               <option value="cube">Cubo</option>
+               <option value="dave">Pirâmide triangular</option>
+            </select>
+            <br>
+            <div style="display: inline-flex;">
+               <div>
+                  <label for="form-names">Cor: </label><br>
+                  <select name="form-names" id="form-names">
+                     <option value="face1">Face 1</option>
+                     <option value="face2">Face 2</option>
+                     <option value="face3">Face 3</option>
+                     <option value="face4">Face 4</option>
+                     <option value="face5">Face 5</option>
+                     <option value="face6">Face 6</option>
+                  </select>
+                  <br>
+                  <br>
+               </div>
+               <div>
+                  <br>
+                  <button id="rotate-btn">Carregar Textura</button><br>
+                  <button id="rotate-btn">Adicionar Primitiva</button>
+                  <br><br>
+               </div>
             </div>
          </div>
          
@@ -142,22 +149,22 @@
          <input type="number" name="rotation_transform" value="3" id="z_rotation">
          <br><br>
 
-         <label>TranslaÃ§Ã£o X</label>
+         <label>Translação X</label>
          <input type="number" name="rotation_transform" value="1" id="x_rotation">
          <br>
          
-         <label>TranslaÃ§Ã£o Y</label>
+         <label>Translação Y</label>
          <input type="number" name="rotation_transform" value="2" id="y_rotation">
          <br>
          
-         <label>TranslaÃ§Ã£o Z</label>
+         <label>Translação Z</label>
          <input type="number" name="rotation_transform" value="3" id="z_rotation">
          <br>
             
          <br>
    
          <button id="rotate-btn">Carregar Textura</button> 
-         <button id="rotate-btn">Aplicar TransformaÃ§Ã£o</button> 
+         <button id="rotate-btn">Aplicar Transformação</button> 
          <br><br>
          <div style="text-align: right;">
             <button id="rotate-btn" style="align-items: right;">Cancelar</button> 
