@@ -41,7 +41,7 @@
          <div style="display: inline-flex" class="mt-4">
             <div style="align-items: start" class="border border-1 rounded-1 ms-3 ps-1">
                <h5>Adicionar fonte de luz</h5>
-               <select name="light-type" id="light-type" class="form-select ">
+               <select name="light-type" id="light-type" class="form-select">
                   <option value="type1">Tipo1</option>
                   <option value="type2">Tipo2</option>
                   <option value="type3">Tipo3</option>
@@ -94,17 +94,17 @@
       </div>
 
       <div class="ms-5">
-            <div class="border border-1 ps-1">
-            <label for="form-names">Adicionar Primitiva </label>
-            <select name="form-names" id="form-names">
+         <div class="border border-1 rounded-1 ps-1">
+            <h5>Adicionar Primitiva</h5>
+            <select name="add-primitive" id="add-primitive" class="form-select">
                <option value="cube">Cubo</option>
                <option value="dave">Pirâmide triangular</option>
             </select>
-            <br>
-            <div style="display: inline-flex;">
+
+            <div style="display: inline-flex;" class="mt-2">
                <div>
-                  <label for="form-names">Cor: </label><br>
-                  <select name="form-names" id="form-names">
+                  <p class="fw-bold">Cor:</p>
+                  <select name="color-face" id="color-face" class="form-select">
                      <option value="face1">Face 1</option>
                      <option value="face2">Face 2</option>
                      <option value="face3">Face 3</option>
@@ -112,62 +112,65 @@
                      <option value="face5">Face 5</option>
                      <option value="face6">Face 6</option>
                   </select>
-                  <br>
-                  <br>
                </div>
-               <div>
-                  <br>
-                  <button id="rotate-btn">Carregar Textura</button><br>
-                  <button id="rotate-btn">Adicionar Primitiva</button>
-                  <br><br>
+               <div class="ps-5 pt-5">
+                  <button id="btn-load-texture" class="btn btn-primary border border-1 border-dark">Carregar Textura</button><br>
+                  <button id="btn-add-primitive" class="mt-2 mb-2 btn btn-primary border border-1 border-dark">Adicionar Primitiva</button>
                </div>
             </div>
          </div>
-         
-         <h3>Adicionar Modelo</h3>
-         <div style="display: inline-flex;">
-            <button id="rotate-btn">Carregar Modelo</button><br>
-            <button id="rotate-btn">Carregar Textura</button> 
-         </div>
-         <br><br>
-         <div style="text-align: right;">
-            <button id="rotate-btn" style="align-items: right;">Adicionar Modelo</button> 
-         </div>
-         
 
-         <h3>Manipular Objeto</h3>
-         <h3>Selecionar Objeto: ALGO</h3>
-         <label>Scalling X</label>
-         <input type="number" name="rotation_transform" value="1" id="x_rotation">
-         <br>
+         <div class="mt-2 border border-1 rounded-1 ps-1">
+            <h5>Adicionar Modelo</h5>
+            <div style="display: inline-flex;" class="mt-2">
+               <button id="btn-load-module" class="btn btn-primary border border-1 border-dark me-2">Carregar Modelo</button><br>
+               <button id="btn-load-texture-model" class="btn btn-primary border border-1 border-dark">Carregar Textura</button>
+            </div>
+            <div style="text-align: right;" class="mt-3 me-1">
+               <button id="btn-add-model" style="align-items: flex-end;" class="btn btn-primary border border-1 border-dark mb-2">Adicionar Modelo</button>
+            </div>
+         </div>
          
-         <label>Scalling Y</label>
-         <input type="number" name="rotation_transform" value="2" id="y_rotation">
-         <br>
-         
-         <label>Scalling Z</label>
-         <input type="number" name="rotation_transform" value="3" id="z_rotation">
-         <br><br>
+         <div class="border border-1 rounded-1 mt-2 ps-1">
+            <h5>Manipular Objeto</h5>
+            <h6 class="mt-2 fw-bold">Selecionar Objeto:</h6>
+            <select name="object-type-manipulation" id="object-type-manipulation" class="form-select">
+               <option value="cubo-1">Cubo 1</option>
+               <option value="cubo-2">Cubo 2</option>
+               <option value="cubo-3">Cubo 3</option>
+            </select>
+            <label class="mt-4 fw-bold">Scaling X</label>
+            <input type="number" name="scaling-x" id="scaling-x">
+            <br>
 
-         <label>Translação X</label>
-         <input type="number" name="rotation_transform" value="1" id="x_rotation">
-         <br>
-         
-         <label>Translação Y</label>
-         <input type="number" name="rotation_transform" value="2" id="y_rotation">
-         <br>
-         
-         <label>Translação Z</label>
-         <input type="number" name="rotation_transform" value="3" id="z_rotation">
-         <br>
-            
-         <br>
-   
-         <button id="rotate-btn">Carregar Textura</button> 
-         <button id="rotate-btn">Aplicar Transformação</button> 
-         <br><br>
-         <div style="text-align: right;">
-            <button id="rotate-btn" style="align-items: right;">Cancelar</button> 
+            <label class="mt-1 fw-bold">Scaling Y</label>
+            <input type="number" name="scaling-y" id="scaling-y">
+            <br>
+
+            <label class="mt-1 fw-bold">Scaling Z</label>
+            <input type="number" name="scaling-z" id="scaling-z">
+            <br>
+
+            <label class="mt-4 fw-bold">Translação X</label>
+            <input type="number" name="translation-x" id="translation-x">
+            <br>
+
+            <label class="mt-1 fw-bold">Translação Y</label>
+            <input type="number" name="translation-y" id="translation-y">
+            <br>
+
+            <label class="mt-1 fw-bold">Translação Z</label>
+            <input type="number" name="translation-z" id="translation-z">
+            <br>
+
+            <div class="mt-4">
+               <button id="btn-load-texture-manipulate" class="btn btn-primary border border-1 border-dark">Carregar Textura</button>
+               <button id="btn-apply-transformation" class="btn btn-primary border border-1 border-dark me-1">Aplicar Transformação</button>
+               <br>
+               <div style="text-align: right;" class="mt-4 mb-1 me-3">
+                  <button id="btn-remove" style="align-items: flex-end;" class="btn btn-danger border border-1 border-dark">Remover</button>
+               </div>
+            </div>
          </div>
       </div>
    </div>
