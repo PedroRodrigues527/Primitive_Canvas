@@ -3,6 +3,8 @@ let texCoordsArray = [];
 let colorsArray = [];
 let normalsArray = [];
 
+let color = new Uint8Array(4);
+
 let primitivesArray = [];
 const MAX_PRIMITIVES = 10;
 
@@ -19,6 +21,7 @@ let diffDirectionUniformLocation;
 
 let program;
 
+//TODO: CHOOSE MODEL IN HTML
 let model_src = "modelos/tiger.obj";
 let model_txt = "modelos/tiger_texture.jpg";
 
@@ -60,62 +63,112 @@ async function init() {
     diffDirectionUniformLocation = gl.getUniformLocation(program, 'diffuse_light.direction');
 
     // Set the image for the texture
+    //TODO: CHANGE LOCATION OF THIS CODE
     let image = new Image();
     image.src = model_txt;
     image.onload = function () {
         configureTexture(image);
     }
 
+    updateOptionsSelect("REMOVE");
+
     // *** Create the event listeners for the buttons
     document.getElementById("btn-add-primitive").onclick = function () {
-        addCube();
+        if(document.getElementById("add-primitive").value === "cube")
+        {
+            addCube();
+            updateOptionsSelect("Cubo ");
+        }
+        else if(document.getElementById("add-primitive").value === "pyramid")
+        {
+            //TODO: addPiramide();
+            updateOptionsSelect("Pirâmide ");
+        }
     };
     document.getElementById("btn-add-model").onclick = async function () {
         await createObject();
+        updateOptionsSelect("Modelo ");
     };
     document.getElementById("btn-add-light").onclick = function () {
         applyLighting();
     };
+    document.getElementById("btn-start-animate").onclick = function () {
+        startAnimation();
+    }
+    //TODO: OTHER ONCLICK BUTTONS
 
 
     // *** Render ***
     render();
+
+    /*
+    // *** Add listener for mouse down event
+    canvas.addEventListener("mousedown", function (event) {
+
+        // Render to texture with base colors
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+
+        // Get mouse position
+        let x = event.clientX;
+        let y = canvas.height - event.clientY;
+
+        // Read the pixels and print the result
+        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
+
+        //document.getElementById('color-result').textContent = colorResult
+
+        // Normal render
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+
+    });
+
+     */
 }
 
 function cube() {
 
     // Specify the coordinates to draw
     pointsArray = [
+        //FRONT FACE
         -.5, 0.5, 0.5,
         -.5, -.5, 0.5,
         0.5, -.5, 0.5,
         -.5, 0.5, 0.5,
         0.5, -.5, 0.5,
         0.5, 0.5, 0.5,
+        //RIGHT FACE
         0.5, 0.5, 0.5,
         0.5, -.5, 0.5,
         0.5, -.5, -.5,
         0.5, 0.5, 0.5,
         0.5, -.5, -.5,
         0.5, 0.5, -.5,
+        //BOTTOM FACE
         0.5, -.5, 0.5,
         -.5, -.5, 0.5,
         -.5, -.5, -.5,
         0.5, -.5, 0.5,
         -.5, -.5, -.5,
         0.5, -.5, -.5,
+        //TOP FACE
         0.5, 0.5, -.5,
         -.5, 0.5, -.5,
         -.5, 0.5, 0.5,
         0.5, 0.5, -.5,
         -.5, 0.5, 0.5,
         0.5, 0.5, 0.5,
+        //
         -.5, -.5, -.5,
         -.5, 0.5, -.5,
         0.5, 0.5, -.5,
         -.5, -.5, -.5,
         0.5, 0.5, -.5,
         0.5, -.5, -.5,
+        //
         -.5, 0.5, -.5,
         -.5, -.5, -.5,
         -.5, -.5, 0.5,
@@ -164,6 +217,7 @@ function cube() {
         1, 0,
     ];
 
+    /*
     // Specify the colors of the faces
     let vertexColors = [
         [1.0, 1.0, 0.0], // yellow
@@ -181,6 +235,8 @@ function cube() {
             colorsArray.push(...faceColor);
         }
     }
+
+     */
 
 }
 
@@ -209,10 +265,11 @@ function prepareCube(cube)
     // Send texture data to the GPU
     let nBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normalsArray), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pointsArray), gl.STATIC_DRAW);
     //gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pointsArray), gl.STATIC_DRAW);
 
     // Define the form of the data
+    //TODO: GET NORMAL VECTORS OF CUBE
     let normalCoord = gl.getAttribLocation(program, "vNormal");
     gl.enableVertexAttribArray(normalCoord);
     gl.vertexAttribPointer(normalCoord, 3, gl.FLOAT, false, 0, 0);
@@ -384,4 +441,61 @@ function applyLighting()
     {
         return -1;
     }
+}
+
+function startAnimation()
+{
+    let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
+    let rotationX = document.getElementById("rotation-x").value;
+    let rotationY = document.getElementById("rotation-y").value;
+    let rotationZ = document.getElementById("rotation-z").value;
+
+    if(typeObject.includes("Cubo "))
+    {
+        let indexElement = typeObject.substring(5);
+        let cubeGotten = primitivesArray[indexElement];
+        cubeGotten.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
+        cubeGotten.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
+        cubeGotten.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
+        //TODO: MISSING WAY TO ANIMATE AND UPDATE FRAME WHEN THIS HAPPENS
+    }
+}
+
+function updateOptionsSelect(typeObject)
+{
+    let options = document.getElementById('object-type').options;
+    let options2 = document.getElementById('object-type-manipulation').options;
+
+    if(typeObject === "Cubo " || typeObject === "Pirâmide ")
+    {
+        let option = document.createElement("option");
+        option.text = typeObject + (primitivesArray.length - 1);
+        option.id = typeObject + (primitivesArray.length - 1);
+        options2.add(option);
+
+        let option2 = document.createElement("option");
+        option2.text = typeObject + (primitivesArray.length - 1);
+        option2.id = typeObject + (primitivesArray.length - 1);
+        options.add(option2);
+    }
+    else if(typeObject === "Modelo ")
+    {
+        let option = document.createElement("option");
+        option.text = typeObject + (modelsArray.length - 1);
+        option.id = typeObject + (modelsArray.length - 1);
+        options2.add(option);
+
+        let option2 = document.createElement("option");
+        option2.text = typeObject + (modelsArray.length - 1);
+        option2.id = typeObject + (modelsArray.length - 1);
+        options.add(option2);
+    }
+    else if(typeObject === "REMOVE") {
+        for (let i = options.length - 1; i >= 0; i--) {
+            options.remove(i);
+            options2.remove(i);
+        }
+    }
+    else
+        return -1;
 }
