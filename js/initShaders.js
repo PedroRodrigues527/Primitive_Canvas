@@ -1,31 +1,32 @@
-function initShaders(gl, vertexShaderId, fragmentShaderId) {
+async function initShaders(gl) {
+    let msg;
     var vertShdr;
     var fragShdr;
-    var vertElem = document.getElementById(vertexShaderId);
-    if (!vertElem) {
-      alert("Unable to load vertex shader " + vertexShaderId);
+    var frag_source = await loadTextResource("shaders/fragmentShader.glsl");
+    var vert_source = await loadTextResource("shaders/vertexShader.glsl");
+    if (vert_source === "") {
+      alert("Unable to load vertex shader " + vert_source);
       return -1;
     } else {
       vertShdr = gl.createShader(gl.VERTEX_SHADER);
-      gl.shaderSource(vertShdr, vertElem.text);
+      gl.shaderSource(vertShdr, vert_source);
       gl.compileShader(vertShdr);
       if (!gl.getShaderParameter(vertShdr, gl.COMPILE_STATUS)) {
-        var msg = "Vertex shader failed to compile.  The error log is:" +
-          "<pre>" + gl.getShaderInfoLog(vertShdr) + "</pre>";
-        alert(msg);
+          msg = "Vertex shader failed to compile.  The error log is:" +
+              "<pre>" + gl.getShaderInfoLog(vertShdr) + "</pre>";
+          alert(msg);
         return -1;
       }
     }
-    var fragElem = document.getElementById(fragmentShaderId);
-    if (!fragElem) {
-      alert("Unable to load vertex shader " + fragmentShaderId);
+    if (frag_source === "") {
+      alert("Unable to load vertex shader " + frag_source);
       return -1;
     } else {
       fragShdr = gl.createShader(gl.FRAGMENT_SHADER);
-      gl.shaderSource(fragShdr, fragElem.text);
+      gl.shaderSource(fragShdr, frag_source);
       gl.compileShader(fragShdr);
       if (!gl.getShaderParameter(fragShdr, gl.COMPILE_STATUS)) {
-        var msg = "Fragment shader failed to compile.  The error log is:" +
+        msg = "Fragment shader failed to compile.  The error log is:" +
           "<pre>" + gl.getShaderInfoLog(fragShdr) + "</pre>";
         alert(msg);
         return -1;
@@ -36,7 +37,7 @@ function initShaders(gl, vertexShaderId, fragmentShaderId) {
     gl.attachShader(program, fragShdr);
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      var msg = "Shader program failed to link.  The error log is:" +
+      msg = "Shader program failed to link.  The error log is:" +
         "<pre>" + gl.getProgramInfoLog(program) + "</pre>";
       alert(msg);
       return -1;
