@@ -8,7 +8,7 @@ struct DirectionalLight
 
 varying vec2 fTexCoord;
 
-//varying vec3 fColor;
+varying vec3 fColor;
 
 uniform sampler2D texture;
 uniform vec3 ambientLightIntensity;
@@ -18,7 +18,7 @@ uniform DirectionalLight diffuse_light;
 void main()
 {
 	vec3 phongLight = ambientLightIntensity + diffuse_light.color * max(dot(fNormal, diffuse_light.direction), 0.0);
-	vec4 texel = texture2D(texture, fTexCoord);
+	vec4 texel = vec4(fColor,1.0) * texture2D(texture, fTexCoord);
 	gl_FragColor = vec4(texel.rgb * phongLight, texel.a);
 	//gl_FragColor = vec4(fColor, 1.0);
 }

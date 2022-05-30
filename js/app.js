@@ -217,7 +217,7 @@ function cube() {
         1, 0,
     ];
 
-    /*
+
     // Specify the colors of the faces
     let vertexColors = [
         [1.0, 1.0, 0.0], // yellow
@@ -236,7 +236,7 @@ function cube() {
         }
     }
 
-     */
+
 
 }
 
@@ -266,13 +266,25 @@ function prepareCube(cube)
     let nBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pointsArray), gl.STATIC_DRAW);
-    //gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pointsArray), gl.STATIC_DRAW);
+    //gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normalsArray), gl.STATIC_DRAW);
 
     // Define the form of the data
     //TODO: GET NORMAL VECTORS OF CUBE
     let normalCoord = gl.getAttribLocation(program, "vNormal");
     gl.enableVertexAttribArray(normalCoord);
     gl.vertexAttribPointer(normalCoord, 3, gl.FLOAT, false, 0, 0);
+
+
+    // *** Send color data to the GPU ***
+    var cBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorsArray), gl.STATIC_DRAW);
+
+    // *** Define the color of the data ***
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.enableVertexAttribArray(vColor);
+    gl.vertexAttribPointer(vColor, 3, gl.FLOAT, false, 0, 0);
+
 
     // *** Get a pointer for the model viewer
     modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
@@ -394,6 +406,18 @@ function prepareModel()
     gl.enableVertexAttribArray(normalCoord);
     gl.vertexAttribPointer(normalCoord, 3, gl.FLOAT, false, 0, 0);
 
+
+    // *** Send color data to the GPU ***
+    var cBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorsArray), gl.STATIC_DRAW);
+
+    // *** Define the color of the data ***
+    var vColor = gl.getAttribLocation(program, "vColor");
+    gl.enableVertexAttribArray(vColor);
+    gl.vertexAttribPointer(vColor, 3, gl.FLOAT, false, 0, 0);
+
+
     // *** Get a pointer for the model viewer
     modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
     ctm = mat4.create();
@@ -407,6 +431,7 @@ async function createObject()
         pointsArray = modelData.position;
         texCoordsArray = modelData.texcoord;
         normalsArray = modelData.normal;
+        colorsArray = Array(pointsArray.length).fill(1.0);
         normalize(pointsArray);
         modelsArray.push(modelData);
     }
