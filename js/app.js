@@ -161,14 +161,14 @@ function cube() {
         0.5, 0.5, -.5,
         -.5, 0.5, 0.5,
         0.5, 0.5, 0.5,
-        //
+        //BACK FACE
         -.5, -.5, -.5,
         -.5, 0.5, -.5,
         0.5, 0.5, -.5,
         -.5, -.5, -.5,
         0.5, 0.5, -.5,
         0.5, -.5, -.5,
-        //
+        //LEFT FACE
         -.5, 0.5, -.5,
         -.5, -.5, -.5,
         -.5, -.5, 0.5,
@@ -216,6 +216,51 @@ function cube() {
         1, 1,
         1, 0,
     ];
+
+    normalsArray = [
+        //FRONT FACE
+        0, 0, -0.5,
+        0, 0, -0.5,
+        0, 0, -0.5,
+        0, 0, -0.5,
+        0, 0, -0.5,
+        0, 0, -0.5,
+        //RIGHT FACE
+        -0.5, 0, 0,
+        -0.5, 0, 0,
+        -0.5, 0, 0,
+        -0.5, 0, 0,
+        -0.5, 0, 0,
+        -0.5, 0, 0,
+        //BOTTOM FACE
+        0, .5, 0,
+        0, .5, 0,
+        0, .5, 0,
+        0, .5, 0,
+        0, .5, 0,
+        0, .5, 0,
+        //TOP FACE
+        0, -0.5, 0,
+        0, -0.5, 0,
+        0, -0.5, 0,
+        0, -0.5, 0,
+        0, -0.5, 0,
+        0, -0.5, 0,
+        //BACK FACE
+        0, 0, .5,
+        0, 0, .5,
+        0, 0, .5,
+        0, 0, .5,
+        0, 0, .5,
+        0, 0, .5,
+        //LEFT FACE
+        .5, 0, 0,
+        .5, 0, 0,
+        .5, 0, 0,
+        .5, 0, 0,
+        .5, 0, 0,
+        .5, 0, 0,
+    ]
 
 
     // Specify the colors of the faces
@@ -265,7 +310,7 @@ function prepareCube(cube)
     // Send texture data to the GPU
     let nBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pointsArray), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normalsArray), gl.STATIC_DRAW);
     //gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normalsArray), gl.STATIC_DRAW);
 
     // Define the form of the data

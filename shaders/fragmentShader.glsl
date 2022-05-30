@@ -20,5 +20,4 @@ void main()
 	vec3 phongLight = ambientLightIntensity + diffuse_light.color * max(dot(fNormal, diffuse_light.direction), 0.0);
 	vec4 texel = vec4(fColor,1.0) * texture2D(texture, fTexCoord);
 	gl_FragColor = vec4(texel.rgb * phongLight, texel.a);
-	//gl_FragColor = vec4(fColor, 1.0);
 }
