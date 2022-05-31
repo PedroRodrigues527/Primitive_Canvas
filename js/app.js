@@ -57,28 +57,14 @@ async function init() {
     program = await initShaders(gl);
     gl.useProgram(program);
 
-
     ambientUniformLocation = gl.getUniformLocation(program, 'ambientLightIntensity');
     diffColorUniformLocation = gl.getUniformLocation(program, 'diffuse_light.color');
     diffDirectionUniformLocation = gl.getUniformLocation(program, 'diffuse_light.direction');
 
-    // Set the image for the texture
-    //TODO: CHANGE LOCATION OF THIS CODE
-
-    /*
-    let image = new Image();
-    image.src = model_txt;
-    image.onload = function () {
-        configureTexture(image);
-    }
-
-     */
-
-
-
     updateOptionsSelect("REMOVE");
 
-    // *** Create the event listeners for the buttons
+    // *** Create the event listeners for the buttons ***
+
     document.getElementById("btn-add-primitive").onclick = function () {
         if(document.getElementById("add-primitive").value === "cube")
         {
@@ -95,13 +81,16 @@ async function init() {
     document.getElementById("btn-load-texture").onclick = function () {
         document.getElementById("add-primitive-get-texture-file").click();
     };
+
     document.getElementById("btn-add-model").onclick = async function () {
         await createObject();
         updateOptionsSelect("Modelo ");
     };
+
     document.getElementById("btn-add-light").onclick = function () {
         applyLighting();
     };
+
     document.getElementById("btn-start-animate").onclick = function () {
         startAnimation();
     }
@@ -389,14 +378,6 @@ function addCube(textureChosen) {
 
         if(textureChosen !== "")
         {
-            /*
-            //disable color
-            let colorsArraySize = colorsArray.length;
-            colorsArray = [];
-            colorsArray = Array(colorsArraySize).fill([1.0,1.0,1.0]);
-            */
-
-
             const stringSplit = textureChosen.split('\\').pop().split('/').pop();
             model_txt = "modelos/" + stringSplit;
             let image = new Image();
@@ -405,6 +386,17 @@ function addCube(textureChosen) {
                 configureTexture(image);
             }
         }
+        else
+        {
+            model_txt = "modelos/white.png";
+            let image = new Image();
+            image.src = model_txt;
+            image.onload = function () {
+                configureTexture(image);
+            }
+        }
+
+        model_txt = "";
 
         // Append the cube object to the array
         primitivesArray.push(cube);
