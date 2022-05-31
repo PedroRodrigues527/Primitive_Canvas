@@ -420,7 +420,7 @@ function preparePrimitive(primitive)
     // *** Send color data to the GPU ***
     var cBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorsArray), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(primitive.colors), gl.STATIC_DRAW);
 
     // *** Define the color of the data ***
     var vColor = gl.getAttribLocation(program, "vColor");
@@ -534,6 +534,7 @@ function addPrimitive(textureChosen, primitiveType) {
         }
 
         model_txt = "";
+        colorsArray = [];
 
         // Append the cube object to the array
         primitivesArray.push(primitive);
