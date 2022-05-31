@@ -692,6 +692,18 @@ function startAnimation()
         cubeGotten.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
         cubeGotten.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
         //TODO: MISSING WAY TO ANIMATE AND UPDATE FRAME WHEN THIS HAPPENS
+        cubeGotten.currentRotation.x += cubeGotten.rotation.x;
+        cubeGotten.currentRotation.y += cubeGotten.rotation.y;
+        cubeGotten.currentRotation.z += cubeGotten.rotation.z;
+        mat4.rotateX(ctm, ctm, cubeGotten.currentRotation.x);
+        mat4.rotateY(ctm, ctm, cubeGotten.currentRotation.y);
+        mat4.rotateZ(ctm, ctm, cubeGotten.currentRotation.z);
+
+        // *** Transfer the information to the model viewer ***
+        gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+        // *** Draw the triangles ***
+        gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
 
     }
 }
