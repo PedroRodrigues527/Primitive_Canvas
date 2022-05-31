@@ -295,47 +295,17 @@ function triangularPyramid() {
     // Specify the coordinates to draw
     pointsArray = [
         //FRONT FACE
-        -.5, 0.5, 0.5,
-        -.5, -.5, 0.5,
-        0.5, -.5, 0.5,
-        -.5, 0.5, 0.5,
-        0.5, -.5, 0.5,
-        0.5, 0.5, 0.5,
+        -.5, 0, -5,
+        0, .5, 0,
+        .5, 0, .5,
         //RIGHT FACE
-        0.5, 0.5, 0.5,
-        0.5, -.5, 0.5,
-        0.5, -.5, -.5,
-        0.5, 0.5, 0.5,
-        0.5, -.5, -.5,
-        0.5, 0.5, -.5,
-        //BOTTOM FACE
-        0.5, -.5, 0.5,
-        -.5, -.5, 0.5,
-        -.5, -.5, -.5,
-        0.5, -.5, 0.5,
-        -.5, -.5, -.5,
-        0.5, -.5, -.5,
-        //TOP FACE
-        0.5, 0.5, -.5,
-        -.5, 0.5, -.5,
-        -.5, 0.5, 0.5,
-        0.5, 0.5, -.5,
-        -.5, 0.5, 0.5,
-        0.5, 0.5, 0.5,
-        //BACK FACE
-        -.5, -.5, -.5,
-        -.5, 0.5, -.5,
-        0.5, 0.5, -.5,
-        -.5, -.5, -.5,
-        0.5, 0.5, -.5,
-        0.5, -.5, -.5,
+        0, .5, 0,
+        .5, 0, .5,
+        0, 0, -.5,
         //LEFT FACE
-        -.5, 0.5, -.5,
-        -.5, -.5, -.5,
-        -.5, -.5, 0.5,
-        -.5, 0.5, -.5,
-        -.5, -.5, 0.5,
-        -.5, 0.5, 0.5,
+
+        //BOTTOM FACE
+
     ];
 
     // Get coordinates to insert texture in cube
@@ -495,8 +465,6 @@ function prepareCube(cube)
 
 function addCube(textureChosen) {
     if(primitivesArray.length < MAX_PRIMITIVES) {
-        cube();
-
         // Create the cube object
         let cube = {
             scale: {
