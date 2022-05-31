@@ -89,14 +89,14 @@ async function init() {
         {
             cube();
             let textureChosen = document.getElementById("add-primitive-get-texture-file").value;
-            addCube(textureChosen);
+            addPrimitive(textureChosen, "Cubo ");
             updateOptionsSelect("Cubo ");
         }
         else if(document.getElementById("add-primitive").value === "triangular-pyramid")
         {
             triangularPyramid();
             let textureChosen = document.getElementById("add-primitive-get-texture-file").value;
-            addTriangularPyramid(textureChosen);
+            addPrimitive(textureChosen, "Pir\u00E2mide triangular ");
             updateOptionsSelect("Pir\u00E2mide triangular ");
         }
         else
@@ -378,6 +378,15 @@ function triangularPyramid() {
 
 function preparePrimitive(primitive)
 {
+    if(primitive.id === "Cubo ")
+    {
+        cube();
+    }
+    else if(primitive.id === "Pir\u00E2mide triangular ")
+    {
+        triangularPyramid();
+    }
+
     // *** Send position data to the GPU ***
     let vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
@@ -442,10 +451,66 @@ function preparePrimitive(primitive)
     gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
 }
 
-function addCube(textureChosen) {
+function addPrimitive(textureChosen, primitiveType) {
     if(primitivesArray.length < MAX_PRIMITIVES) {
-        // Create the cube object
-        let cube = {
+        if(textureChosen !== "")
+        {
+            const stringSplit = textureChosen.split('\\').pop().split('/').pop();
+            model_txt = "modelos/" + stringSplit;
+            let image = new Image();
+            image.src = model_txt;
+            image.onload = function () {
+                configureTexture(image);
+            }
+        }
+        else
+        {
+            model_txt = "modelos/white.png";
+            let image = new Image();
+            image.src = model_txt;
+            image.onload = function () {
+                configureTexture(image);
+            }
+        }
+
+        if(primitiveType === "Cubo ") {
+            let faceColor1 = document.getElementById('color-face-1').value;
+            let faceColor2 = document.getElementById('color-face-2').value;
+            let faceColor3 = document.getElementById('color-face-3').value;
+            let faceColor4 = document.getElementById('color-face-4').value;
+            let faceColor5 = document.getElementById('color-face-5').value;
+            let faceColor6 = document.getElementById('color-face-6').value;
+            let arrayFaceColors = [faceColor1, faceColor2, faceColor3, faceColor4, faceColor5, faceColor6];
+
+            // Set the color of the faces
+            for (let face = 0; face < 6; face++) {
+                let faceColor = vertexColors[arrayFaceColors[face]];
+                for (let vertex = 0; vertex < 6; vertex++) {
+                    colorsArray.push(...faceColor);
+                }
+            }
+        }
+        else if(primitiveType === "Pir\u00E2mide triangular ")
+        {
+            let faceColor1 = document.getElementById('color-face-1').value;
+            let faceColor2 = document.getElementById('color-face-2').value;
+            let faceColor3 = document.getElementById('color-face-3').value;
+            let faceColor4 = document.getElementById('color-face-4').value;
+            let arrayFaceColors = [faceColor1,faceColor2,faceColor3,faceColor4];
+
+            // Set the color of the faces
+            for (let face = 0; face < 4; face++) {
+                let faceColor = vertexColors[arrayFaceColors[face]];
+                for (let vertex = 0; vertex < 3; vertex++) {
+                    colorsArray.push(...faceColor);
+                }
+            }
+        }
+
+        // Create the primitive object
+        let primitive = {
+            id: primitiveType,
+            colors: colorsArray,
             scale: {
                 x: parseFloat("100") / 100,
                 y: parseFloat("100") / 100,
@@ -468,115 +533,10 @@ function addCube(textureChosen) {
             }
         }
 
-        if(textureChosen !== "")
-        {
-            const stringSplit = textureChosen.split('\\').pop().split('/').pop();
-            model_txt = "modelos/" + stringSplit;
-            let image = new Image();
-            image.src = model_txt;
-            image.onload = function () {
-                configureTexture(image);
-            }
-        }
-        else
-        {
-            model_txt = "modelos/white.png";
-            let image = new Image();
-            image.src = model_txt;
-            image.onload = function () {
-                configureTexture(image);
-            }
-        }
-
-        let faceColor1 = document.getElementById('color-face-1').value;
-        let faceColor2 = document.getElementById('color-face-2').value;
-        let faceColor3 = document.getElementById('color-face-3').value;
-        let faceColor4 = document.getElementById('color-face-4').value;
-        let faceColor5 = document.getElementById('color-face-5').value;
-        let faceColor6 = document.getElementById('color-face-6').value;
-        let arrayFaceColors = [faceColor1,faceColor2,faceColor3,faceColor4,faceColor5,faceColor6];
-
-        // Set the color of the faces
-        for (let face = 0; face < 6; face++) {
-            let faceColor = vertexColors[arrayFaceColors[face]];
-            for (let vertex = 0; vertex < 6; vertex++) {
-                colorsArray.push(...faceColor);
-            }
-        }
-
         model_txt = "";
 
         // Append the cube object to the array
-        primitivesArray.push(cube);
-    }
-    else
-        alert("Maximum number of primitives reached!");
-}
-
-function addTriangularPyramid(textureChosen) {
-    if(primitivesArray.length < MAX_PRIMITIVES) {
-        // Create the pyramid object
-        let pyramid = {
-            scale: {
-                x: parseFloat("100") / 100,
-                y: parseFloat("100") / 100,
-                z: parseFloat("100") / 100,
-            },
-            translation: {
-                x: parseFloat("0") / 100,
-                y: parseFloat("0") / 100,
-                z: parseFloat("0") / 100
-            },
-            rotation: {
-                x: parseFloat("0") * (Math.PI / 180),
-                y: parseFloat("0") * (Math.PI / 180),
-                z: parseFloat("0") * (Math.PI / 180)
-            },
-            currentRotation: {
-                x: 0,
-                y: 0,
-                z: 0,
-            }
-        }
-
-        if(textureChosen !== "")
-        {
-            const stringSplit = textureChosen.split('\\').pop().split('/').pop();
-            model_txt = "modelos/" + stringSplit;
-            let image = new Image();
-            image.src = model_txt;
-            image.onload = function () {
-                configureTexture(image);
-            }
-        }
-        else
-        {
-            model_txt = "modelos/white.png";
-            let image = new Image();
-            image.src = model_txt;
-            image.onload = function () {
-                configureTexture(image);
-            }
-        }
-
-        let faceColor1 = document.getElementById('color-face-1').value;
-        let faceColor2 = document.getElementById('color-face-2').value;
-        let faceColor3 = document.getElementById('color-face-3').value;
-        let faceColor4 = document.getElementById('color-face-4').value;
-        let arrayFaceColors = [faceColor1,faceColor2,faceColor3,faceColor4];
-
-        // Set the color of the faces
-        for (let face = 0; face < 4; face++) {
-            let faceColor = vertexColors[arrayFaceColors[face]];
-            for (let vertex = 0; vertex < 3; vertex++) {
-                colorsArray.push(...faceColor);
-            }
-        }
-
-        model_txt = "";
-
-        // Append the cube object to the array
-        primitivesArray.push(pyramid);
+        primitivesArray.push(primitive);
     }
     else
         alert("Maximum number of primitives reached!");
