@@ -40,8 +40,8 @@ let zAxis = 2;
 let axis = xAxis;
 
 //TODO: CHOOSE .OBJ AND .IMG MODEL IN HTML
-let model_src = "modelos/tiger.obj";
-let model_txt = "modelos/tiger_texture.jpg";
+let model_src = "";
+let model_txt = "";
 
 window.onload = function () {
     init();
@@ -60,8 +60,8 @@ async function init() {
     }
 
     // *** Computes the cube and pyramid ***
-    cube();
-    triangularPyramid();
+    //cube();
+    //triangularPyramid();
 
     // *** Set viewport ***
     gl.viewport(0, 0, canvas.width, canvas.height)
@@ -120,9 +120,44 @@ async function init() {
 
     // * ADD MODEL SECTION *
     //TODO: load model button & load texture button
+    document.getElementById("btn-load-model").onclick = function () {
+        document.getElementById("add-model-load-model").click();
+    };
+    document.getElementById("add-model-load-model").onchange = function () {
+        if(document.getElementById("add-model-load-model").value !== "")
+        {
+            document.getElementById("btn-load-model").innerText='Modelo Carregado \u2714';
+        }
+        else
+        {
+            document.getElementById("btn-load-model").innerText='Carregar Modelo';
+        }
+    }
+    document.getElementById("btn-load-texture-model").onclick = function () {
+        document.getElementById("add-model-load-texture-model").click();
+    };
+    document.getElementById("add-model-load-texture-model").onchange = function () {
+        if(document.getElementById("add-model-load-texture-model").value !== "")
+        {
+            document.getElementById("btn-load-texture-model").innerText='Textura Carregada \u2714';
+        }
+        else
+        {
+            document.getElementById("btn-load-texture-model").innerText='Carregar Textura';
+        }
+    }
     document.getElementById("btn-add-model").onclick = async function () {
-        await createObject();
-        updateOptionsSelect("Modelo ");
+        let modelChosen = document.getElementById("add-model-load-model").value;
+        let textureChosen = document.getElementById("add-model-load-texture-model").value;
+        if(modelChosen !== "")
+        {
+            await createObject(modelChosen, textureChosen);
+            updateOptionsSelect("Modelo ");
+        }
+        else
+        {
+            alert('O modelo ainda não foi escolhido.');
+        }
     };
 
     // * ADD LIGHT SECTION *
@@ -131,7 +166,6 @@ async function init() {
     };
 
     // * ADD ANIMATION SECTION *
-    //TODO: Fix Rotation not working at the moment
     document.getElementById("btn-start-animate").onclick = function () {
         startAnimation();
     }
@@ -628,9 +662,12 @@ function prepareModel()
 }
 
 //TODO: Insert possiblity of not adding a texture and verify "load model" and "load texture" buttons
-async function createObject()
+async function createObject(modelChosen, textureChosen)
 {
     if(modelsArray.length < MAX_MODELS) {
+        const stringSplit = modelChosen.split('\\').pop().split('/').pop();
+        model_src = "modelos/" + stringSplit;
+
         let modelContent = await loadObjResource(model_src);
         let modelData = parseOBJ(modelContent);
         pointsArray = modelData.position;
@@ -640,11 +677,29 @@ async function createObject()
         normalize(pointsArray);
         modelsArray.push(modelData);
 
-        let image = new Image();
-        image.src = model_txt;
-        image.onload = function () {
-            configureTexture(image);
+
+        if(textureChosen !== "")
+        {
+            let stringSplit1 = textureChosen.split('\\').pop().split('/').pop();
+            model_txt = "modelos/" + stringSplit1;
+            let image = new Image();
+            image.src = model_txt;
+            image.onload = function () {
+                configureTexture(image);
+            }
         }
+        else
+        {
+            model_txt = "modelos/white.png";
+            let image = new Image();
+            image.src = model_txt;
+            image.onload = function () {
+                configureTexture(image);
+            }
+        }
+
+        model_src = "";
+        model_txt = "";
     }
     else
     {
@@ -679,7 +734,6 @@ function applyLighting()
     }
 }
 
-//TODO: FIX THE ROTATION NOT BEING CORRECTLY WORKING
 function startAnimation()
 {
     let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
@@ -687,22 +741,22 @@ function startAnimation()
     let rotationY = document.getElementById("rotation-y").value;
     let rotationZ = document.getElementById("rotation-z").value;
 
-    if(rotationX.length != 0 && rotationY.length != 0 && rotationZ.length != 0){
+    if(rotationX.length !== 0 && rotationY.length !== 0 && rotationZ.length !== 0){
 
-        if(typeObject.includes("Cubo "))
+        if(typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular "))
         {
-            let indexElement = typeObject.substring(5);
-            let cubeGotten = primitivesArray[indexElement];
-            cubeGotten.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
-            cubeGotten.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
-            cubeGotten.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
-            //TODO: MISSING WAY TO ANIMATE AND UPDATE FRAME WHEN THIS HAPPENS
-            cubeGotten.currentRotation.x += cubeGotten.rotation.x;
-            cubeGotten.currentRotation.y += cubeGotten.rotation.y;
-            cubeGotten.currentRotation.z += cubeGotten.rotation.z;
-            mat4.rotateX(ctm, ctm, cubeGotten.currentRotation.x);
-            mat4.rotateY(ctm, ctm, cubeGotten.currentRotation.y);
-            mat4.rotateZ(ctm, ctm, cubeGotten.currentRotation.z);
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            let primitiveElement = primitivesArray[indexElement];
+            primitiveElement.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
+            primitiveElement.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
+            primitiveElement.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
+
+            primitiveElement.currentRotation.x += primitiveElement.rotation.x;
+            primitiveElement.currentRotation.y += primitiveElement.rotation.y;
+            primitiveElement.currentRotation.z += primitiveElement.rotation.z;
+            mat4.rotateX(ctm, ctm, primitiveElement.currentRotation.x);
+            mat4.rotateY(ctm, ctm, primitiveElement.currentRotation.y);
+            mat4.rotateZ(ctm, ctm, primitiveElement.currentRotation.z);
 
             // *** Transfer the information to the model viewer ***
             gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
@@ -711,6 +765,8 @@ function startAnimation()
             gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
         }
     }
+    else
+        return -1;
 }
 
 function updateOptionsSelect(typeObject)
