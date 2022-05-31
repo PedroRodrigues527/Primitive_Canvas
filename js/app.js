@@ -15,8 +15,6 @@ let vertexColors = [
     [0.0 ,0.0, 0.0], // black
 ];
 
-//let color = new Uint8Array(4);
-
 let primitivesArray = [];
 const MAX_PRIMITIVES = 10;
 
@@ -84,6 +82,8 @@ async function init() {
     updateOptionsSelect("REMOVE");
 
     // *** Create the event listeners for the buttons ***
+
+    // * ADD PRIMITIVE SECTION *
     document.getElementById("btn-add-primitive").onclick = function () {
         if(document.getElementById("add-primitive").value === "cube")
         {
@@ -117,54 +117,30 @@ async function init() {
             document.getElementById("btn-load-texture").innerText='Carregar Textura';
         }
     }
-    //TODO:
-    // Add Pyramid
 
-
+    // * ADD MODEL SECTION *
+    //TODO: load model button & load texture button
     document.getElementById("btn-add-model").onclick = async function () {
         await createObject();
         updateOptionsSelect("Modelo ");
     };
 
+    // * ADD LIGHT SECTION *
     document.getElementById("btn-add-light").onclick = function () {
         applyLighting();
     };
 
+    // * ADD ANIMATION SECTION *
+    //TODO: Fix Rotation not working at the moment
     document.getElementById("btn-start-animate").onclick = function () {
         startAnimation();
     }
     //TODO: OTHER ONCLICK BUTTONS
-    // *** Create the event listeners for the buttons
+    // * MANIPULATE OBJECT SECTION *
 
     // *** Render ***
     render();
 
-    /*
-    // *** Add listener for mouse down event
-    canvas.addEventListener("mousedown", function (event) {
-
-        // Render to texture with base colors
-        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
-
-        // Get mouse position
-        let x = event.clientX;
-        let y = canvas.height - event.clientY;
-
-        // Read the pixels and print the result
-        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
-
-        //document.getElementById('color-result').textContent = colorResult
-
-        // Normal render
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
-
-    });
-
-     */
 }
 
 function cube() {
@@ -648,6 +624,7 @@ function prepareModel()
     ctm = mat4.create();
 }
 
+//TODO: Insert possiblity of not adding a texture and verify "load model" and "load texture" buttons
 async function createObject()
 {
     if(modelsArray.length < MAX_MODELS) {
@@ -699,6 +676,7 @@ function applyLighting()
     }
 }
 
+//TODO: FIX THE ROTATION NOT BEING CORRECTLY WORKING
 function startAnimation()
 {
     let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
