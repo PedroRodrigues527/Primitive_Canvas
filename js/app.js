@@ -5,14 +5,14 @@ let normalsArray = [];
 
 // Specify the colors of faces
 let vertexColors = [
-    [0.0 ,0.0, 0.0], // white
+    [1.0 ,1.0, 1.0], // white
     [1.0, 1.0, 0.0], // yellow
     [0.0, 1.0, 0.0], // green
     [0.0, 0.0, 1.0], // blue
     [1.0, 0.0, 1.0], // magenta
     [0.0, 1.0, 1.0], // cyan
     [1.0, 0.0, 0.0], // red
-    [1.0, 1.0, 1.0], // black
+    [0.0 ,0.0, 0.0], // black
 ];
 
 //let color = new Uint8Array(4);
@@ -55,7 +55,7 @@ async function init() {
 
     // *** Computes the cube and pyramid ***
     cube();
-    // TODO: PYRAMID TRIANGULAR
+    triangularPyramid();
 
     // *** Set viewport ***
     gl.viewport(0, 0, canvas.width, canvas.height)
@@ -79,14 +79,17 @@ async function init() {
     document.getElementById("btn-add-primitive").onclick = function () {
         if(document.getElementById("add-primitive").value === "cube")
         {
+            cube();
             let textureChosen = document.getElementById("add-primitive-get-texture-file").value;
             addCube(textureChosen);
             updateOptionsSelect("Cubo ");
         }
         else if(document.getElementById("add-primitive").value === "triangular-pyramid")
         {
-            //TODO: addPiramide();
-            updateOptionsSelect("Pirâmide triangular ");
+            triangularPyramid();
+            let textureChosen = document.getElementById("add-primitive-get-texture-file").value;
+            addTriangularPyramid(textureChosen);
+            updateOptionsSelect("Pir\u00E2mide triangular ");
         }
         else
         {
@@ -295,17 +298,21 @@ function triangularPyramid() {
     // Specify the coordinates to draw
     pointsArray = [
         //FRONT FACE
-        -.5, 0, -5,
+        -.5, -.5, .5,
         0, .5, 0,
-        .5, 0, .5,
+        .5, -.5, .5,
         //RIGHT FACE
         0, .5, 0,
-        .5, 0, .5,
-        0, 0, -.5,
+        .5, -.5, .5,
+        0, -.5, -.5,
         //LEFT FACE
-
+        -.5, -.5, .5,
+        0, -.5, -.5,
+        0, .5, 0,
         //BOTTOM FACE
-
+        -.5, -.5, .5,
+        0, -.5, -.5,
+        .5, -.5, .5,
     ];
 
     // Get coordinates to insert texture in cube
@@ -313,89 +320,41 @@ function triangularPyramid() {
         0, 0,
         0, 1,
         1, 1,
-        0, 0,
-        1, 1,
-        1, 0,
+
         0, 0,
         0, 1,
         1, 1,
-        0, 0,
-        1, 1,
-        1, 0,
+
         0, 0,
         0, 1,
         1, 1,
-        0, 0,
+
         1, 1,
         1, 0,
         0, 0,
-        0, 1,
-        1, 1,
-        0, 0,
-        1, 1,
-        1, 0,
-        0, 0,
-        0, 1,
-        1, 1,
-        0, 0,
-        1, 1,
-        1, 0,
-        0, 0,
-        0, 1,
-        1, 1,
-        0, 0,
-        1, 1,
-        1, 0,
     ];
 
     normalsArray = [
-        //FRONT FACE
-        0, 0, 0.5,
-        0, 0, 0.5,
-        0, 0, 0.5,
-        0, 0, 0.5,
-        0, 0, 0.5,
-        0, 0, 0.5,
-        //RIGHT FACE
-        0.5, 0, 0,
-        0.5, 0, 0,
-        0.5, 0, 0,
-        0.5, 0, 0,
-        0.5, 0, 0,
-        0.5, 0, 0,
-        //BOTTOM FACE
+        0, .25, 0.5,
+        0, .25, 0.5,
+        0, .25, 0.5,
+
+        .5, .25, 0,
+        .5, .25, 0,
+        .5, .25, 0,
+
+        -.5, .25, 0,
+        -.5, .25, 0,
+        -.5, .25, 0,
+
         0, -.5, 0,
         0, -.5, 0,
         0, -.5, 0,
-        0, -.5, 0,
-        0, -.5, 0,
-        0, -.5, 0,
-        //TOP FACE
-        0, 0.5, 0,
-        0, 0.5, 0,
-        0, 0.5, 0,
-        0, 0.5, 0,
-        0, 0.5, 0,
-        0, 0.5, 0,
-        //BACK FACE
-        0, 0, -.5,
-        0, 0, -.5,
-        0, 0, -.5,
-        0, 0, -.5,
-        0, 0, -.5,
-        0, 0, -.5,
-        //LEFT FACE
-        -.5, 0, 0,
-        -.5, 0, 0,
-        -.5, 0, 0,
-        -.5, 0, 0,
-        -.5, 0, 0,
-        -.5, 0, 0,
     ]
 
 }
 
-function prepareCube(cube)
+function preparePrimitive(primitive)
 {
     // *** Send position data to the GPU ***
     let vBuffer = gl.createBuffer();
@@ -443,18 +402,16 @@ function prepareCube(cube)
     ctm = mat4.create();
 
     // *** Apply transformations ***
-    mat4.scale(ctm, ctm, [cube.scale.x, cube.scale.y, cube.scale.z]);
-    mat4.translate(ctm, ctm, [cube.translation.x, cube.translation.y, cube.translation.z]);
+    mat4.scale(ctm, ctm, [primitive.scale.x, primitive.scale.y, primitive.scale.z]);
+    mat4.translate(ctm, ctm, [primitive.translation.x, primitive.translation.y, primitive.translation.z]);
 
     // *** Rotate cube (if necessary) ***
-    cube.currentRotation.x += cube.rotation.x;
-    cube.currentRotation.y += cube.rotation.y;
-    cube.currentRotation.z += cube.rotation.z;
-    mat4.rotateX(ctm, ctm, cube.currentRotation.x);
-    mat4.rotateY(ctm, ctm, cube.currentRotation.y);
-    mat4.rotateZ(ctm, ctm, cube.currentRotation.z);
-
-
+    primitive.currentRotation.x += primitive.rotation.x;
+    primitive.currentRotation.y += primitive.rotation.y;
+    primitive.currentRotation.z += primitive.rotation.z;
+    mat4.rotateX(ctm, ctm, primitive.currentRotation.x);
+    mat4.rotateY(ctm, ctm, primitive.currentRotation.y);
+    mat4.rotateZ(ctm, ctm, primitive.currentRotation.z);
 
     // *** Transfer the information to the model viewer ***
     gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
@@ -534,13 +491,82 @@ function addCube(textureChosen) {
         alert("Maximum number of primitives reached!");
 }
 
+function addTriangularPyramid(textureChosen) {
+    if(primitivesArray.length < MAX_PRIMITIVES) {
+        // Create the pyramid object
+        let pyramid = {
+            scale: {
+                x: parseFloat("100") / 100,
+                y: parseFloat("100") / 100,
+                z: parseFloat("100") / 100,
+            },
+            translation: {
+                x: parseFloat("0") / 100,
+                y: parseFloat("0") / 100,
+                z: parseFloat("0") / 100
+            },
+            rotation: {
+                x: parseFloat("0") * (Math.PI / 180),
+                y: parseFloat("0") * (Math.PI / 180),
+                z: parseFloat("0") * (Math.PI / 180)
+            },
+            currentRotation: {
+                x: 0,
+                y: 0,
+                z: 0,
+            }
+        }
+
+        if(textureChosen !== "")
+        {
+            const stringSplit = textureChosen.split('\\').pop().split('/').pop();
+            model_txt = "modelos/" + stringSplit;
+            let image = new Image();
+            image.src = model_txt;
+            image.onload = function () {
+                configureTexture(image);
+            }
+        }
+        else
+        {
+            model_txt = "modelos/white.png";
+            let image = new Image();
+            image.src = model_txt;
+            image.onload = function () {
+                configureTexture(image);
+            }
+        }
+
+        let faceColor1 = document.getElementById('color-face-1').value;
+        let faceColor2 = document.getElementById('color-face-2').value;
+        let faceColor3 = document.getElementById('color-face-3').value;
+        let faceColor4 = document.getElementById('color-face-4').value;
+        let arrayFaceColors = [faceColor1,faceColor2,faceColor3,faceColor4];
+
+        // Set the color of the faces
+        for (let face = 0; face < 4; face++) {
+            let faceColor = vertexColors[arrayFaceColors[face]];
+            for (let vertex = 0; vertex < 3; vertex++) {
+                colorsArray.push(...faceColor);
+            }
+        }
+
+        model_txt = "";
+
+        // Append the cube object to the array
+        primitivesArray.push(pyramid);
+    }
+    else
+        alert("Maximum number of primitives reached!");
+}
+
 function render() {
     // Clear the canvas
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     //  Add the cubes to the canvas
     for (const primitive of primitivesArray) {
-        prepareCube(primitive);
+        preparePrimitive(primitive);
     }
 
     // Add objects to the canvas
@@ -687,7 +713,7 @@ function updateOptionsSelect(typeObject)
     let options = document.getElementById('object-type').options;
     let options2 = document.getElementById('object-type-manipulation').options;
 
-    if(typeObject === "Cubo " || typeObject === "Pirâmide ")
+    if(typeObject === "Cubo " || typeObject === "Pir\u00E2mide triangular ")
     {
         let option = document.createElement("option");
         option.text = typeObject + (primitivesArray.length - 1);
