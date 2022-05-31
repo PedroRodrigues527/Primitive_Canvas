@@ -3,7 +3,7 @@ let texCoordsArray = [];
 let colorsArray = [];
 let normalsArray = [];
 
-let color = new Uint8Array(4);
+//let color = new Uint8Array(4);
 
 let primitivesArray = [];
 const MAX_PRIMITIVES = 10;
@@ -21,7 +21,7 @@ let diffDirectionUniformLocation;
 
 let program;
 
-//TODO: CHOOSE MODEL IN HTML
+//TODO: CHOOSE .OBJ AND .IMG MODEL IN HTML
 let model_src = "modelos/tiger.obj";
 let model_txt = "modelos/tiger_texture.jpg";
 
@@ -64,11 +64,17 @@ async function init() {
 
     // Set the image for the texture
     //TODO: CHANGE LOCATION OF THIS CODE
+
+    /*
     let image = new Image();
     image.src = model_txt;
     image.onload = function () {
         configureTexture(image);
     }
+
+     */
+
+
 
     updateOptionsSelect("REMOVE");
 
@@ -76,7 +82,8 @@ async function init() {
     document.getElementById("btn-add-primitive").onclick = function () {
         if(document.getElementById("add-primitive").value === "cube")
         {
-            addCube();
+            let textureChosen = document.getElementById("add-primitive-get-texture-file").value;
+            addCube(textureChosen);
             updateOptionsSelect("Cubo ");
         }
         else if(document.getElementById("add-primitive").value === "pyramid")
@@ -84,6 +91,9 @@ async function init() {
             //TODO: addPiramide();
             updateOptionsSelect("Pirâmide ");
         }
+    };
+    document.getElementById("btn-load-texture").onclick = function () {
+        document.getElementById("add-primitive-get-texture-file").click();
     };
     document.getElementById("btn-add-model").onclick = async function () {
         await createObject();
@@ -219,47 +229,47 @@ function cube() {
 
     normalsArray = [
         //FRONT FACE
-        0, 0, -0.5,
-        0, 0, -0.5,
-        0, 0, -0.5,
-        0, 0, -0.5,
-        0, 0, -0.5,
-        0, 0, -0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
         //RIGHT FACE
-        -0.5, 0, 0,
-        -0.5, 0, 0,
-        -0.5, 0, 0,
-        -0.5, 0, 0,
-        -0.5, 0, 0,
-        -0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
         //BOTTOM FACE
-        0, .5, 0,
-        0, .5, 0,
-        0, .5, 0,
-        0, .5, 0,
-        0, .5, 0,
-        0, .5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
         //TOP FACE
-        0, -0.5, 0,
-        0, -0.5, 0,
-        0, -0.5, 0,
-        0, -0.5, 0,
-        0, -0.5, 0,
-        0, -0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
         //BACK FACE
-        0, 0, .5,
-        0, 0, .5,
-        0, 0, .5,
-        0, 0, .5,
-        0, 0, .5,
-        0, 0, .5,
+        0, 0, -.5,
+        0, 0, -.5,
+        0, 0, -.5,
+        0, 0, -.5,
+        0, 0, -.5,
+        0, 0, -.5,
         //LEFT FACE
-        .5, 0, 0,
-        .5, 0, 0,
-        .5, 0, 0,
-        .5, 0, 0,
-        .5, 0, 0,
-        .5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
     ]
 
 
@@ -280,8 +290,6 @@ function cube() {
             colorsArray.push(...faceColor);
         }
     }
-
-
 
 }
 
@@ -305,20 +313,17 @@ function prepareCube(cube)
     // Define the form of the data
     let vTexCoord = gl.getAttribLocation(program, "vTexCoord");
     gl.enableVertexAttribArray(vTexCoord);
-    gl.vertexAttribPointer(vTexCoord, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(vTexCoord, 2, gl.FLOAT, false, 0, 0);
 
     // Send texture data to the GPU
     let nBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normalsArray), gl.STATIC_DRAW);
-    //gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normalsArray), gl.STATIC_DRAW);
 
     // Define the form of the data
-    //TODO: GET NORMAL VECTORS OF CUBE
     let normalCoord = gl.getAttribLocation(program, "vNormal");
     gl.enableVertexAttribArray(normalCoord);
     gl.vertexAttribPointer(normalCoord, 3, gl.FLOAT, false, 0, 0);
-
 
     // *** Send color data to the GPU ***
     var cBuffer = gl.createBuffer();
@@ -334,7 +339,6 @@ function prepareCube(cube)
     // *** Get a pointer for the model viewer
     modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
     ctm = mat4.create();
-
 
     // *** Apply transformations ***
     mat4.scale(ctm, ctm, [cube.scale.x, cube.scale.y, cube.scale.z]);
@@ -357,7 +361,7 @@ function prepareCube(cube)
     gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
 }
 
-function addCube() {
+function addCube(textureChosen) {
     if(primitivesArray.length < MAX_PRIMITIVES) {
         // Create the cube object
         let cube = {
@@ -382,6 +386,26 @@ function addCube() {
                 z: 0,
             }
         }
+
+        if(textureChosen !== "")
+        {
+            /*
+            //disable color
+            let colorsArraySize = colorsArray.length;
+            colorsArray = [];
+            colorsArray = Array(colorsArraySize).fill([1.0,1.0,1.0]);
+            */
+
+
+            const stringSplit = textureChosen.split('\\').pop().split('/').pop();
+            model_txt = "modelos/" + stringSplit;
+            let image = new Image();
+            image.src = model_txt;
+            image.onload = function () {
+                configureTexture(image);
+            }
+        }
+
         // Append the cube object to the array
         primitivesArray.push(cube);
     }
@@ -479,6 +503,12 @@ async function createObject()
         colorsArray = Array(pointsArray.length).fill(1.0);
         normalize(pointsArray);
         modelsArray.push(modelData);
+
+        let image = new Image();
+        image.src = model_txt;
+        image.onload = function () {
+            configureTexture(image);
+        }
     }
     else
     {
