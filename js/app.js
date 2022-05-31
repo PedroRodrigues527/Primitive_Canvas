@@ -120,15 +120,6 @@ async function init() {
     //TODO:
     // Add Pyramid
 
-    document.getElementById("rotation-x").onclick = function () {
-        axis = xAxis;
-    };
-    document.getElementById("rotation-y").onclick = function () {
-        axis = yAxis;
-    };
-    document.getElementById("rotation-z").onclick = function () {
-        axis = zAxis;
-    };
 
     document.getElementById("btn-add-model").onclick = async function () {
         await createObject();
@@ -144,16 +135,6 @@ async function init() {
     }
     //TODO: OTHER ONCLICK BUTTONS
     // *** Create the event listeners for the buttons
-    document.getElementById("rotation-x").onclick = function () {
-        axis = xAxis;
-    };
-    document.getElementById("rotation-x").onclick = function () {
-        axis = yAxis;
-    };
-    document.getElementById("rotation-x").onclick = function () {
-        axis = zAxis;
-    };
-
 
     // *** Render ***
     render();
