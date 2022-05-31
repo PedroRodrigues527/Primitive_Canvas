@@ -3,6 +3,18 @@ let texCoordsArray = [];
 let colorsArray = [];
 let normalsArray = [];
 
+// Specify the colors of faces
+let vertexColors = [
+    [0.0 ,0.0, 0.0], // white
+    [1.0, 1.0, 0.0], // yellow
+    [0.0, 1.0, 0.0], // green
+    [0.0, 0.0, 1.0], // blue
+    [1.0, 0.0, 1.0], // magenta
+    [0.0, 1.0, 1.0], // cyan
+    [1.0, 0.0, 0.0], // red
+    [1.0, 1.0, 1.0], // black
+];
+
 //let color = new Uint8Array(4);
 
 let primitivesArray = [];
@@ -49,7 +61,7 @@ async function init() {
     gl.viewport(0, 0, canvas.width, canvas.height)
 
     // *** Set color to the canvas ***
-    gl.clearColor(1.0, 1.0, 1.0, 1.0)
+    gl.clearColor(0.95, .95, .95, 1.0)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
 
@@ -64,7 +76,6 @@ async function init() {
     updateOptionsSelect("REMOVE");
 
     // *** Create the event listeners for the buttons ***
-
     document.getElementById("btn-add-primitive").onclick = function () {
         if(document.getElementById("add-primitive").value === "cube")
         {
@@ -72,15 +83,31 @@ async function init() {
             addCube(textureChosen);
             updateOptionsSelect("Cubo ");
         }
-        else if(document.getElementById("add-primitive").value === "pyramid")
+        else if(document.getElementById("add-primitive").value === "triangular-pyramid")
         {
             //TODO: addPiramide();
-            updateOptionsSelect("Pirâmide ");
+            updateOptionsSelect("Pirâmide triangular ");
+        }
+        else
+        {
+            return -1;
         }
     };
     document.getElementById("btn-load-texture").onclick = function () {
         document.getElementById("add-primitive-get-texture-file").click();
     };
+    document.getElementById("add-primitive-get-texture-file").onchange = function () {
+        if(document.getElementById("add-primitive-get-texture-file").value !== "")
+        {
+            document.getElementById("btn-load-texture").innerText='Textura Carregada \u2714';
+        }
+        else
+        {
+            document.getElementById("btn-load-texture").innerText='Carregar Textura';
+        }
+    }
+    //TODO:
+    // Add Pyramid
 
     document.getElementById("btn-add-model").onclick = async function () {
         await createObject();
@@ -261,24 +288,140 @@ function cube() {
         -.5, 0, 0,
     ]
 
+}
 
-    // Specify the colors of the faces
-    let vertexColors = [
-        [1.0, 1.0, 0.0], // yellow
-        [0.0, 1.0, 0.0], // green
-        [0.0, 0.0, 1.0], // blue
-        [1.0, 0.0, 1.0], // magenta
-        [0.0, 1.0, 1.0], // cyan
-        [1.0, 0.0, 0.0], // red
+function triangularPyramid() {
+
+    // Specify the coordinates to draw
+    pointsArray = [
+        //FRONT FACE
+        -.5, 0.5, 0.5,
+        -.5, -.5, 0.5,
+        0.5, -.5, 0.5,
+        -.5, 0.5, 0.5,
+        0.5, -.5, 0.5,
+        0.5, 0.5, 0.5,
+        //RIGHT FACE
+        0.5, 0.5, 0.5,
+        0.5, -.5, 0.5,
+        0.5, -.5, -.5,
+        0.5, 0.5, 0.5,
+        0.5, -.5, -.5,
+        0.5, 0.5, -.5,
+        //BOTTOM FACE
+        0.5, -.5, 0.5,
+        -.5, -.5, 0.5,
+        -.5, -.5, -.5,
+        0.5, -.5, 0.5,
+        -.5, -.5, -.5,
+        0.5, -.5, -.5,
+        //TOP FACE
+        0.5, 0.5, -.5,
+        -.5, 0.5, -.5,
+        -.5, 0.5, 0.5,
+        0.5, 0.5, -.5,
+        -.5, 0.5, 0.5,
+        0.5, 0.5, 0.5,
+        //BACK FACE
+        -.5, -.5, -.5,
+        -.5, 0.5, -.5,
+        0.5, 0.5, -.5,
+        -.5, -.5, -.5,
+        0.5, 0.5, -.5,
+        0.5, -.5, -.5,
+        //LEFT FACE
+        -.5, 0.5, -.5,
+        -.5, -.5, -.5,
+        -.5, -.5, 0.5,
+        -.5, 0.5, -.5,
+        -.5, -.5, 0.5,
+        -.5, 0.5, 0.5,
     ];
 
-    // Set the color of the faces
-    for (let face = 0; face < 6; face++) {
-        let faceColor = vertexColors[face];
-        for (let vertex = 0; vertex < 6; vertex++) {
-            colorsArray.push(...faceColor);
-        }
-    }
+    // Get coordinates to insert texture in cube
+    texCoordsArray = [
+        0, 0,
+        0, 1,
+        1, 1,
+        0, 0,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        0, 0,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        0, 0,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        0, 0,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        0, 0,
+        1, 1,
+        1, 0,
+        0, 0,
+        0, 1,
+        1, 1,
+        0, 0,
+        1, 1,
+        1, 0,
+    ];
+
+    normalsArray = [
+        //FRONT FACE
+        0, 0, 0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
+        0, 0, 0.5,
+        //RIGHT FACE
+        0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
+        0.5, 0, 0,
+        //BOTTOM FACE
+        0, -.5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
+        0, -.5, 0,
+        //TOP FACE
+        0, 0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
+        0, 0.5, 0,
+        //BACK FACE
+        0, 0, -.5,
+        0, 0, -.5,
+        0, 0, -.5,
+        0, 0, -.5,
+        0, 0, -.5,
+        0, 0, -.5,
+        //LEFT FACE
+        -.5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
+        -.5, 0, 0,
+    ]
 
 }
 
@@ -352,6 +495,8 @@ function prepareCube(cube)
 
 function addCube(textureChosen) {
     if(primitivesArray.length < MAX_PRIMITIVES) {
+        cube();
+
         // Create the cube object
         let cube = {
             scale: {
@@ -393,6 +538,22 @@ function addCube(textureChosen) {
             image.src = model_txt;
             image.onload = function () {
                 configureTexture(image);
+            }
+        }
+
+        let faceColor1 = document.getElementById('color-face-1').value;
+        let faceColor2 = document.getElementById('color-face-2').value;
+        let faceColor3 = document.getElementById('color-face-3').value;
+        let faceColor4 = document.getElementById('color-face-4').value;
+        let faceColor5 = document.getElementById('color-face-5').value;
+        let faceColor6 = document.getElementById('color-face-6').value;
+        let arrayFaceColors = [faceColor1,faceColor2,faceColor3,faceColor4,faceColor5,faceColor6];
+
+        // Set the color of the faces
+        for (let face = 0; face < 6; face++) {
+            let faceColor = vertexColors[arrayFaceColors[face]];
+            for (let vertex = 0; vertex < 6; vertex++) {
+                colorsArray.push(...faceColor);
             }
         }
 
