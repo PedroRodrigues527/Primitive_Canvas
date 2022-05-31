@@ -135,6 +135,9 @@ async function init() {
     document.getElementById("btn-start-animate").onclick = function () {
         startAnimation();
     }
+    /*document.getElementById("btn-end-animate").onclick = function () {
+        endAnimation();
+    }*/
     //TODO: OTHER ONCLICK BUTTONS
     // * MANIPULATE OBJECT SECTION *
 
@@ -684,27 +687,29 @@ function startAnimation()
     let rotationY = document.getElementById("rotation-y").value;
     let rotationZ = document.getElementById("rotation-z").value;
 
-    if(typeObject.includes("Cubo "))
-    {
-        let indexElement = typeObject.substring(5);
-        let cubeGotten = primitivesArray[indexElement];
-        cubeGotten.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
-        cubeGotten.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
-        cubeGotten.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
-        //TODO: MISSING WAY TO ANIMATE AND UPDATE FRAME WHEN THIS HAPPENS
-        cubeGotten.currentRotation.x += cubeGotten.rotation.x;
-        cubeGotten.currentRotation.y += cubeGotten.rotation.y;
-        cubeGotten.currentRotation.z += cubeGotten.rotation.z;
-        mat4.rotateX(ctm, ctm, cubeGotten.currentRotation.x);
-        mat4.rotateY(ctm, ctm, cubeGotten.currentRotation.y);
-        mat4.rotateZ(ctm, ctm, cubeGotten.currentRotation.z);
+    if(rotationX.length != 0 && rotationY.length != 0 && rotationZ.length != 0){
 
-        // *** Transfer the information to the model viewer ***
-        gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+        if(typeObject.includes("Cubo "))
+        {
+            let indexElement = typeObject.substring(5);
+            let cubeGotten = primitivesArray[indexElement];
+            cubeGotten.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
+            cubeGotten.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
+            cubeGotten.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
+            //TODO: MISSING WAY TO ANIMATE AND UPDATE FRAME WHEN THIS HAPPENS
+            cubeGotten.currentRotation.x += cubeGotten.rotation.x;
+            cubeGotten.currentRotation.y += cubeGotten.rotation.y;
+            cubeGotten.currentRotation.z += cubeGotten.rotation.z;
+            mat4.rotateX(ctm, ctm, cubeGotten.currentRotation.x);
+            mat4.rotateY(ctm, ctm, cubeGotten.currentRotation.y);
+            mat4.rotateZ(ctm, ctm, cubeGotten.currentRotation.z);
 
-        // *** Draw the triangles ***
-        gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+            // *** Transfer the information to the model viewer ***
+            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
 
+            // *** Draw the triangles ***
+            gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+        }
     }
 }
 
