@@ -33,6 +33,14 @@ let diffDirectionUniformLocation;
 
 let program;
 
+const angle = 0.02; // rotation in radians
+
+// constants for rotating
+let xAxis = 0;
+let yAxis = 1;
+let zAxis = 2;
+let axis = xAxis;
+
 //TODO: CHOOSE .OBJ AND .IMG MODEL IN HTML
 let model_src = "modelos/tiger.obj";
 let model_txt = "modelos/tiger_texture.jpg";
@@ -112,6 +120,16 @@ async function init() {
     //TODO:
     // Add Pyramid
 
+    document.getElementById("rotation-x").onclick = function () {
+        axis = xAxis;
+    };
+    document.getElementById("rotation-y").onclick = function () {
+        axis = yAxis;
+    };
+    document.getElementById("rotation-z").onclick = function () {
+        axis = zAxis;
+    };
+
     document.getElementById("btn-add-model").onclick = async function () {
         await createObject();
         updateOptionsSelect("Modelo ");
@@ -125,6 +143,16 @@ async function init() {
         startAnimation();
     }
     //TODO: OTHER ONCLICK BUTTONS
+    // *** Create the event listeners for the buttons
+    document.getElementById("rotation-x").onclick = function () {
+        axis = xAxis;
+    };
+    document.getElementById("rotation-x").onclick = function () {
+        axis = yAxis;
+    };
+    document.getElementById("rotation-x").onclick = function () {
+        axis = zAxis;
+    };
 
 
     // *** Render ***
@@ -705,6 +733,7 @@ function startAnimation()
         cubeGotten.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
         cubeGotten.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
         //TODO: MISSING WAY TO ANIMATE AND UPDATE FRAME WHEN THIS HAPPENS
+
     }
 }
 
