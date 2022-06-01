@@ -21,6 +21,8 @@ const MAX_PRIMITIVES = 10;
 let modelsArray = [];
 const MAX_MODELS = 5;
 
+let counter = 0;
+
 let gl;
 let ctm;
 let modelViewMatrix;
@@ -407,6 +409,8 @@ function preparePrimitive(primitive)
     gl.enableVertexAttribArray(vTexCoord);
     gl.vertexAttribPointer(vTexCoord, 2, gl.FLOAT, false, 0, 0);
 
+    gl.uniform1i( gl.getUniformLocation(program, "texture"), primitive.textureId );
+
     // Send texture data to the GPU
     let nBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer);
@@ -453,11 +457,13 @@ function preparePrimitive(primitive)
 
 function addPrimitive(textureChosen, primitiveType) {
     if(primitivesArray.length < MAX_PRIMITIVES) {
+
+        let image;
         if(textureChosen !== "")
         {
             const stringSplit = textureChosen.split('\\').pop().split('/').pop();
             model_txt = "modelos/" + stringSplit;
-            let image = new Image();
+            image = new Image();
             image.src = model_txt;
             image.onload = function () {
                 configureTexture(image);
@@ -466,7 +472,7 @@ function addPrimitive(textureChosen, primitiveType) {
         else
         {
             model_txt = "modelos/white.png";
-            let image = new Image();
+            image = new Image();
             image.src = model_txt;
             image.onload = function () {
                 configureTexture(image);
@@ -511,6 +517,7 @@ function addPrimitive(textureChosen, primitiveType) {
         let primitive = {
             id: primitiveType,
             colors: colorsArray,
+            textureId: counter,
             scale: {
                 x: parseFloat("100") / 100,
                 y: parseFloat("100") / 100,
@@ -535,6 +542,7 @@ function addPrimitive(textureChosen, primitiveType) {
 
         model_txt = "";
         colorsArray = [];
+        counter++;
 
         // Append the cube object to the array
         primitivesArray.push(primitive);
@@ -570,7 +578,9 @@ function configureTexture(image) {
     gl.generateMipmap(gl.TEXTURE_2D);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);
+
+    gl.activeTexture(gl.TEXTURE0 + counter);
+    gl.uniform1i(gl.getUniformLocation(program, "texture"), counter);
 }
 
 function prepareModel()
