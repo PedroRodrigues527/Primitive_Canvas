@@ -33,15 +33,6 @@ let diffDirectionUniformLocation;
 
 let program;
 
-const angle = 0.02; // rotation in radians
-
-// constants for rotating
-let xAxis = 0;
-let yAxis = 1;
-let zAxis = 2;
-let axis = xAxis;
-
-//TODO: CHOOSE .OBJ AND .IMG MODEL IN HTML
 let model_src = "";
 let model_txt = "";
 
@@ -60,10 +51,6 @@ async function init() {
         alert('WebGL not supported');
         return;
     }
-
-    // *** Computes the cube and pyramid ***
-    //cube();
-    //triangularPyramid();
 
     // *** Set viewport ***
     gl.viewport(0, 0, canvas.width, canvas.height)
@@ -121,7 +108,6 @@ async function init() {
     }
 
     // * ADD MODEL SECTION *
-    //TODO: load model button & load texture button
     document.getElementById("btn-load-model").onclick = function () {
         document.getElementById("add-model-load-model").click();
     };
@@ -168,6 +154,7 @@ async function init() {
     };
 
     // * ADD ANIMATION SECTION *
+    //TODO: ADD END ANIMATION IMPLEMENTATION
     document.getElementById("btn-start-animate").onclick = function () {
         startAnimation();
     }
