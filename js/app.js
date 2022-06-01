@@ -563,7 +563,7 @@ function render() {
     // Add objects to the canvas
     for (const model of modelsArray)
     {
-        prepareModel();
+        prepareModel(model);
     }
 
     // Make the new frame
@@ -583,12 +583,12 @@ function configureTexture(image) {
     gl.uniform1i(gl.getUniformLocation(program, "texture"), counter);
 }
 
-function prepareModel()
+function prepareModel(model)
 {
     // *** Send position data to the GPU ***
     let vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pointsArray), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.data.position), gl.STATIC_DRAW);
 
     // *** Define the form of the data ***
     let vPosition = gl.getAttribLocation(program, "vPosition");
@@ -598,17 +598,19 @@ function prepareModel()
     // Send texture data to the GPU
     let tBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, tBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoordsArray), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.data.texcoord), gl.STATIC_DRAW);
 
     // Define the form of the data
     let vTexCoord = gl.getAttribLocation(program, "vTexCoord");
     gl.enableVertexAttribArray(vTexCoord);
     gl.vertexAttribPointer(vTexCoord, 3, gl.FLOAT, false, 0, 0);
 
+    gl.uniform1i( gl.getUniformLocation(program, "texture"), model.textureId );
+
     // Send texture data to the GPU
     let nBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normalsArray), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.data.normal), gl.STATIC_DRAW);
 
     // Define the form of the data
     let normalCoord = gl.getAttribLocation(program, "vNormal");
@@ -619,20 +621,36 @@ function prepareModel()
     // *** Send color data to the GPU ***
     var cBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorsArray), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.colors), gl.STATIC_DRAW);
 
     // *** Define the color of the data ***
     var vColor = gl.getAttribLocation(program, "vColor");
     gl.enableVertexAttribArray(vColor);
     gl.vertexAttribPointer(vColor, 3, gl.FLOAT, false, 0, 0);
 
-
     // *** Get a pointer for the model viewer
     modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
     ctm = mat4.create();
+
+    // *** Apply transformations ***
+    mat4.scale(ctm, ctm, [model.scale.x, model.scale.y, model.scale.z]);
+    mat4.translate(ctm, ctm, [model.translation.x, model.translation.y, model.translation.z]);
+
+    // *** Rotate cube (if necessary) ***
+    model.currentRotation.x += model.rotation.x;
+    model.currentRotation.y += model.rotation.y;
+    model.currentRotation.z += model.rotation.z;
+    mat4.rotateX(ctm, ctm, model.currentRotation.x);
+    mat4.rotateY(ctm, ctm, model.currentRotation.y);
+    mat4.rotateZ(ctm, ctm, model.currentRotation.z);
+
+    // *** Transfer the information to the model viewer ***
+    gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+    // *** Draw the triangles ***
+    gl.drawArrays(gl.TRIANGLES, 0, model.data.position.length / 3);
 }
 
-//TODO: Insert possiblity of not adding a texture and verify "load model" and "load texture" buttons
 async function createObject(modelChosen, textureChosen)
 {
     if(modelsArray.length < MAX_MODELS) {
@@ -646,8 +664,6 @@ async function createObject(modelChosen, textureChosen)
         normalsArray = modelData.normal;
         colorsArray = Array(pointsArray.length).fill(1.0);
         normalize(pointsArray);
-        modelsArray.push(modelData);
-
 
         if(textureChosen !== "")
         {
@@ -669,8 +685,38 @@ async function createObject(modelChosen, textureChosen)
             }
         }
 
+        let modelDataElement = {
+            data: modelData,
+            colors: colorsArray,
+            textureId: counter,
+            scale: {
+                x: parseFloat("100") / 100,
+                y: parseFloat("100") / 100,
+                z: parseFloat("100") / 100,
+            },
+            translation: {
+                x: parseFloat("0") / 100,
+                y: parseFloat("0") / 100,
+                z: parseFloat("0") / 100
+            },
+            rotation: {
+                x: parseFloat("0") * (Math.PI / 180),
+                y: parseFloat("0") * (Math.PI / 180),
+                z: parseFloat("0") * (Math.PI / 180)
+            },
+            currentRotation: {
+                x: 0,
+                y: 0,
+                z: 0,
+            }
+        }
+
         model_src = "";
         model_txt = "";
+        colorsArray = [];
+        counter++;
+
+        modelsArray.push(modelDataElement);
     }
     else
     {
@@ -735,6 +781,29 @@ function startAnimation()
             // *** Draw the triangles ***
             gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
         }
+        else if(typeObject.includes("Modelo "))
+        {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            let modelElement = modelsArray[indexElement];
+            modelElement.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
+            modelElement.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
+            modelElement.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
+
+            modelElement.currentRotation.x += modelElement.rotation.x;
+            modelElement.currentRotation.y += modelElement.rotation.y;
+            modelElement.currentRotation.z += modelElement.rotation.z;
+            mat4.rotateX(ctm, ctm, modelElement.currentRotation.x);
+            mat4.rotateY(ctm, ctm, modelElement.currentRotation.y);
+            mat4.rotateZ(ctm, ctm, modelElement.currentRotation.z);
+
+            // *** Transfer the information to the model viewer ***
+            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+            // *** Draw the triangles ***
+            gl.drawArrays(gl.TRIANGLES, 0, modelElement.data.position.length / 3);
+        }
+        else
+            return -1;
     }
     else
         return -1;
