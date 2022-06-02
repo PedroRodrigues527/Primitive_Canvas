@@ -154,16 +154,15 @@ async function init() {
     };
 
     // * ADD ANIMATION SECTION *
-    //TODO: ADD END ANIMATION IMPLEMENTATION
     document.getElementById("btn-start-animate").onclick = function () {
         startAnimation();
     }
     document.getElementById("btn-end-animate").onclick = function () {
         endAnimation();
     }
+
     //TODO: OTHER ONCLICK BUTTONS
     // * MANIPULATE OBJECT SECTION *
-
     document.getElementById("btn-apply-transformation").onclick = function () {
         applyTransformation();
     }
@@ -174,7 +173,7 @@ async function init() {
 }
 
 function applyTransformation(){
-    //let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
+    let typeObject = document.getElementById("object-type-manipulation").options[document.getElementById("object-type-manipulation").selectedIndex].text;
     let scalingX = document.getElementById("scaling-x").value;
     let scalingY = document.getElementById("scaling-y").value;
     let scalingZ = document.getElementById("scaling-z").value;
@@ -182,26 +181,46 @@ function applyTransformation(){
     let translationY = document.getElementById("translation-y").value;
     let translationZ = document.getElementById("translation-z").value;
 
-    //Scaling
-    if(scalingX.length !== 0 && scalingY.length !== 0 && scalingZ.length !== 0){
-        console.log("SCALING")
-        console.log(scalingX,scalingY,scalingZ)
-        mat4.scale(ctm, ctm, [scalingX/100, scalingY/100, scalingZ/100]);
 
-        render()
-    }
-    //Translação
-    if(translationX.length !== 0 && translationY.length !== 0 && translationZ.length !== 0){
-        console.log("TRANSLATION")
-        translationX = translationX / 100;
-        translationY = translationY / 100;
-        translationZ = translationZ / 100;
-        mat4.translate(ctm, ctm, [translationX, translationY, translationZ]);
+    if(scalingX.length !== 0 && scalingY.length !== 0 && scalingZ.length !== 0) {
+        if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular ")) {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            let primitiveElement = primitivesArray[indexElement];
+            primitiveElement.scale.x = parseFloat(scalingX) / 100;
+            primitiveElement.scale.y = parseFloat(scalingY) / 100;
+            primitiveElement.scale.z = parseFloat(scalingZ) / 100;
 
-        render()
+            // *** Apply transformations ***
+            mat4.scale(ctm, ctm, [primitiveElement.scale.x, primitiveElement.scale.y, primitiveElement.scale.z]);
+
+            // *** Transfer the information to the model viewer ***
+            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+            // *** Draw the triangles ***
+            gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+        }
+        else if(typeObject.includes("Modelo "))
+        {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            let modelElement = modelsArray[indexElement];
+            modelElement.scale.x = parseFloat(scalingX) / 100;
+            modelElement.scale.y = parseFloat(scalingY) / 100;
+            modelElement.scale.z = parseFloat(scalingZ) / 100;
+
+            // *** Apply transformations ***
+            mat4.scale(ctm, ctm, [modelElement.scale.x, modelElement.scale.y, modelElement.scale.z]);
+
+            // *** Transfer the information to the model viewer ***
+            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+            // *** Draw the triangles ***
+            gl.drawArrays(gl.TRIANGLES, 0, modelElement.data.position.length / 3);
+        }
+        else
+            return -1;
     }
-    else
-        return -1;
+
+    //inserir translação aqui copy paste da implementação do scale
 
 }
 
@@ -830,7 +849,6 @@ function startAnimation()
     let rotationZ = document.getElementById("rotation-z").value;
 
     if(rotationX.length !== 0 && rotationY.length !== 0 && rotationZ.length !== 0){
-
         if(typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular "))
         {
             let indexElement = typeObject.substring(typeObject.length - 1);
