@@ -164,10 +164,47 @@ async function init() {
     //TODO: OTHER ONCLICK BUTTONS
     // * MANIPULATE OBJECT SECTION *
 
+    document.getElementById("btn-apply-transformation").onclick = function () {
+        applyTransformation();
+    }
+
     // *** Render ***
     render();
 
 }
+
+function applyTransformation(){
+    //let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
+    let scalingX = document.getElementById("scaling-x").value;
+    let scalingY = document.getElementById("scaling-y").value;
+    let scalingZ = document.getElementById("scaling-z").value;
+    let translationX = document.getElementById("translation-x").value;
+    let translationY = document.getElementById("translation-y").value;
+    let translationZ = document.getElementById("translation-z").value;
+
+    //Scaling
+    if(scalingX.length !== 0 && scalingY.length !== 0 && scalingZ.length !== 0){
+        console.log("SCALING")
+        console.log(scalingX,scalingY,scalingZ)
+        mat4.scale(ctm, ctm, [scalingX/100, scalingY/100, scalingZ/100]);
+
+        render()
+    }
+    //Translação
+    if(translationX.length !== 0 && translationY.length !== 0 && translationZ.length !== 0){
+        console.log("TRANSLATION")
+        translationX = translationX / 100;
+        translationY = translationY / 100;
+        translationZ = translationZ / 100;
+        mat4.translate(ctm, ctm, [translationX, translationY, translationZ]);
+
+        render()
+    }
+    else
+        return -1;
+
+}
+
 
 function cube() {
 
