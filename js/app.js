@@ -2,6 +2,7 @@ let pointsArray = [];
 let texCoordsArray = [];
 let colorsArray = [];
 let normalsArray = [];
+let isToTerminate = false;
 
 // Specify the colors of faces
 let vertexColors = [
@@ -158,9 +159,9 @@ async function init() {
     document.getElementById("btn-start-animate").onclick = function () {
         startAnimation();
     }
-    /*document.getElementById("btn-end-animate").onclick = function () {
+    document.getElementById("btn-end-animate").onclick = function () {
         endAnimation();
-    }*/
+    }
     //TODO: OTHER ONCLICK BUTTONS
     // * MANIPULATE OBJECT SECTION *
 
@@ -736,6 +737,56 @@ function applyLighting()
     {
         return -1;
     }
+}
+function endAnimation(){
+    let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
+    let rotationX = 0;
+    let rotationY = 0;
+    let rotationZ = 0;
+        if(typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular "))
+        {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            let primitiveElement = primitivesArray[indexElement];
+            primitiveElement.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
+            primitiveElement.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
+            primitiveElement.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
+
+            primitiveElement.currentRotation.x += primitiveElement.rotation.x;
+            primitiveElement.currentRotation.y += primitiveElement.rotation.y;
+            primitiveElement.currentRotation.z += primitiveElement.rotation.z;
+            mat4.rotateX(ctm, ctm, primitiveElement.currentRotation.x);
+            mat4.rotateY(ctm, ctm, primitiveElement.currentRotation.y);
+            mat4.rotateZ(ctm, ctm, primitiveElement.currentRotation.z);
+
+            // *** Transfer the information to the model viewer ***
+            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+            // *** Draw the triangles ***
+            gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+        }
+        else if(typeObject.includes("Modelo "))
+        {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            let modelElement = modelsArray[indexElement];
+            modelElement.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
+            modelElement.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
+            modelElement.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
+
+            modelElement.currentRotation.x += modelElement.rotation.x;
+            modelElement.currentRotation.y += modelElement.rotation.y;
+            modelElement.currentRotation.z += modelElement.rotation.z;
+            mat4.rotateX(ctm, ctm, modelElement.currentRotation.x);
+            mat4.rotateY(ctm, ctm, modelElement.currentRotation.y);
+            mat4.rotateZ(ctm, ctm, modelElement.currentRotation.z);
+
+            // *** Transfer the information to the model viewer ***
+            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+            // *** Draw the triangles ***
+            gl.drawArrays(gl.TRIANGLES, 0, modelElement.data.position.length / 3);
+        }
+        else
+            return -1;
 }
 
 function startAnimation()
