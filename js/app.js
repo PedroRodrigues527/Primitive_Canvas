@@ -166,6 +166,19 @@ async function init() {
     document.getElementById("btn-apply-transformation").onclick = function () {
         applyTransformation();
     }
+    document.getElementById("btn-load-texture-manipulate").onclick = function () {
+        document.getElementById("load-texture-file-manipulate").click();
+    };
+    document.getElementById("load-texture-file-manipulate").onchange = function () {
+        if(document.getElementById("load-texture-file-manipulate").value !== "")
+        {
+            document.getElementById("btn-load-texture-manipulate").innerText='Textura Carregada \u2714';
+        }
+        else
+        {
+            document.getElementById("btn-load-texture-manipulate").innerText='Carregar Textura';
+        }
+    }
 
     // *** Render ***
     render();
@@ -181,81 +194,145 @@ function applyTransformation(){
     let translationY = document.getElementById("translation-y").value;
     let translationZ = document.getElementById("translation-z").value;
 
+    let textureChosen = document.getElementById("load-texture-file-manipulate").value;
 
-    if(scalingX.length !== 0 && scalingY.length !== 0 && scalingZ.length !== 0) {
-        if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular ")) {
-            let indexElement = typeObject.substring(typeObject.length - 1);
-            let primitiveElement = primitivesArray[indexElement];
-            primitiveElement.scale.x = parseFloat(scalingX) / 100;
-            primitiveElement.scale.y = parseFloat(scalingY) / 100;
-            primitiveElement.scale.z = parseFloat(scalingZ) / 100;
 
-            // *** Apply transformations ***
-            mat4.scale(ctm, ctm, [primitiveElement.scale.x, primitiveElement.scale.y, primitiveElement.scale.z]);
+    if(typeObject.length !== 0) {
+        if (scalingX.length !== 0 && scalingY.length !== 0 && scalingZ.length !== 0) {
+            if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular ")) {
+                let indexElement = typeObject.substring(typeObject.length - 1);
+                let primitiveElement = primitivesArray[indexElement];
+                primitiveElement.scale.x = parseFloat(scalingX) / 100;
+                primitiveElement.scale.y = parseFloat(scalingY) / 100;
+                primitiveElement.scale.z = parseFloat(scalingZ) / 100;
 
-            // *** Transfer the information to the model viewer ***
-            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+                // *** Apply transformations ***
+                mat4.scale(ctm, ctm, [primitiveElement.scale.x, primitiveElement.scale.y, primitiveElement.scale.z]);
 
-            // *** Draw the triangles ***
-            gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+                // *** Transfer the information to the model viewer ***
+                gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+                // *** Draw the triangles ***
+                gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+            } else if (typeObject.includes("Modelo ")) {
+                let indexElement = typeObject.substring(typeObject.length - 1);
+                let modelElement = modelsArray[indexElement];
+                modelElement.scale.x = parseFloat(scalingX) / 100;
+                modelElement.scale.y = parseFloat(scalingY) / 100;
+                modelElement.scale.z = parseFloat(scalingZ) / 100;
+
+                // *** Apply transformations ***
+                mat4.scale(ctm, ctm, [modelElement.scale.x, modelElement.scale.y, modelElement.scale.z]);
+
+                // *** Transfer the information to the model viewer ***
+                gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+                // *** Draw the triangles ***
+                gl.drawArrays(gl.TRIANGLES, 0, modelElement.data.position.length / 3);
+            } else
+                return -1;
         }
-        else if(typeObject.includes("Modelo "))
-        {
-            let indexElement = typeObject.substring(typeObject.length - 1);
-            let modelElement = modelsArray[indexElement];
-            modelElement.scale.x = parseFloat(scalingX) / 100;
-            modelElement.scale.y = parseFloat(scalingY) / 100;
-            modelElement.scale.z = parseFloat(scalingZ) / 100;
+        if (translationX.length !== 0 && translationY.length !== 0 && translationZ.length !== 0) {
+            if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular ")) {
+                let indexElement = typeObject.substring(typeObject.length - 1);
+                let primitiveElement = primitivesArray[indexElement];
+                primitiveElement.translation.x = parseFloat(translationX) / 100;
+                primitiveElement.translation.y = parseFloat(translationY) / 100;
+                primitiveElement.translation.z = parseFloat(translationZ) / 100;
 
-            // *** Apply transformations ***
-            mat4.scale(ctm, ctm, [modelElement.scale.x, modelElement.scale.y, modelElement.scale.z]);
+                // *** Apply transformations ***
+                mat4.translate(ctm, ctm, [primitiveElement.translation.x, primitiveElement.translation.y, primitiveElement.translation.z]);
 
-            // *** Transfer the information to the model viewer ***
-            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+                // *** Transfer the information to the model viewer ***
+                gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
 
-            // *** Draw the triangles ***
-            gl.drawArrays(gl.TRIANGLES, 0, modelElement.data.position.length / 3);
+                // *** Draw the triangles ***
+                gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+            } else if (typeObject.includes("Modelo ")) {
+                let indexElement = typeObject.substring(typeObject.length - 1);
+                let modelElement = modelsArray[indexElement];
+                modelElement.translation.x = parseFloat(translationX) / 100;
+                modelElement.translation.y = parseFloat(translationY) / 100;
+                modelElement.translation.z = parseFloat(translationZ) / 100;
+
+                // *** Apply transformations ***
+                mat4.translate(ctm, ctm, [modelElement.translation.x, modelElement.translation.y, modelElement.translation.z]);
+
+                // *** Transfer the information to the model viewer ***
+                gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+                // *** Draw the triangles ***
+                gl.drawArrays(gl.TRIANGLES, 0, modelElement.data.position.length / 3);
+            } else
+                return -1;
+        }
+
+        if (textureChosen.length !== 0) {
+            if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular ")) {
+                let indexElement = typeObject.substring(typeObject.length - 1);
+                let primitiveElement = primitivesArray[indexElement];
+
+                let stringSplit = textureChosen.split('\\').pop().split('/').pop();
+                let texturePathChosen = "modelos/" + stringSplit;
+
+                let image = new Image();
+                image.src = texturePathChosen;
+                image.onload = function () {
+                    configureTexture(image);
+                }
+                primitiveElement.textureId = counter;
+                counter++;
+            } else if (typeObject.includes("Modelo ")) {
+                let indexElement = typeObject.substring(typeObject.length - 1);
+                let modelElement = modelsArray[indexElement];
+
+                let stringSplit = textureChosen.split('\\').pop().split('/').pop();
+                let texturePathChosen = "modelos/" + stringSplit;
+
+                let image = new Image();
+                image.src = texturePathChosen;
+                image.onload = function () {
+                    configureTexture(image);
+                }
+                modelElement.textureId = counter;
+                counter++;
+            } else
+                return -1;
         }
         else
-            return -1;
-    }
-    if(translationX.length !== 0 && translationY.length !== 0 && translationZ.length !== 0) {
-        if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular ")) {
-            let indexElement = typeObject.substring(typeObject.length - 1);
-            let primitiveElement = primitivesArray[indexElement];
-            primitiveElement.translation.x = parseFloat(translationX) / 100;
-            primitiveElement.translation.y = parseFloat(translationY) / 100;
-            primitiveElement.translation.z = parseFloat(translationZ) / 100;
-
-            // *** Apply transformations ***
-            mat4.translate(ctm, ctm, [primitiveElement.translation.x, primitiveElement.translation.y, primitiveElement.translation.z]);
-
-            // *** Transfer the information to the model viewer ***
-            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
-
-            // *** Draw the triangles ***
-            gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
-        }
-        else if(typeObject.includes("Modelo "))
         {
-            let indexElement = typeObject.substring(typeObject.length - 1);
-            let modelElement = modelsArray[indexElement];
-            modelElement.translation.x = parseFloat(translationX) / 100;
-            modelElement.translation.y = parseFloat(translationY) / 100;
-            modelElement.translation.z = parseFloat(translationZ) / 100;
+            if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular ")) {
+                let indexElement = typeObject.substring(typeObject.length - 1);
+                let primitiveElement = primitivesArray[indexElement];
 
-            // *** Apply transformations ***
-            mat4.translate(ctm, ctm, [modelElement.translation.x, modelElement.translation.y, modelElement.translation.z]);
+                let texturePathChosen = "modelos/white.png";
 
-            // *** Transfer the information to the model viewer ***
-            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+                let image = new Image();
+                image.src = texturePathChosen;
+                image.onload = function () {
+                    configureTexture(image);
+                }
+                primitiveElement.textureId = counter;
+                counter++;
+            } else if (typeObject.includes("Modelo ")) {
+                let indexElement = typeObject.substring(typeObject.length - 1);
+                let modelElement = modelsArray[indexElement];
 
-            // *** Draw the triangles ***
-            gl.drawArrays(gl.TRIANGLES, 0, modelElement.data.position.length / 3);
+                let texturePathChosen = "modelos/white.png";
+
+                let image = new Image();
+                image.src = texturePathChosen;
+                image.onload = function () {
+                    configureTexture(image);
+                }
+                modelElement.textureId = counter;
+                counter++;
+            } else
+                return -1;
         }
-        else
-            return -1;
     }
+    else
+        return -1;
 }
 
 

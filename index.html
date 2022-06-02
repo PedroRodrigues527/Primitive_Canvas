@@ -176,15 +176,15 @@
                <option value="cubo-3">Cubo 3</option>
             </select>
             <label class="mt-4 fw-bold" for="scaling-x">Scaling X</label>
-            <input type="number" value="0" name="scaling-x" id="scaling-x">
+            <input type="number" value="100" name="scaling-x" id="scaling-x">
             <br>
 
             <label class="mt-1 fw-bold" for="scaling-y">Scaling Y</label>
-            <input type="number" value="0" name="scaling-y" id="scaling-y">
+            <input type="number" value="100" name="scaling-y" id="scaling-y">
             <br>
 
             <label class="mt-1 fw-bold" for="scaling-z">Scaling Z</label>
-            <input type="number" value="0" name="scaling-z" id="scaling-z">
+            <input type="number" value="100" name="scaling-z" id="scaling-z">
             <br>
 
             <label class="mt-4 fw-bold" for="translation-x">Translação X</label>
@@ -201,6 +201,7 @@
 
             <div class="mt-4">
                <button id="btn-load-texture-manipulate" class="btn btn-primary border border-1 border-dark">Carregar Textura</button>
+               <input type="file" style="display:none;" id="load-texture-file-manipulate" name="load-texture-file-manipulate"/>
                <button id="btn-apply-transformation" class="btn btn-primary border border-1 border-dark me-1">Aplicar Transformação</button>
                <br>
                <div style="text-align: right;" class="mt-4 mb-1 me-3">
