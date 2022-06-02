@@ -2,7 +2,6 @@ let pointsArray = [];
 let texCoordsArray = [];
 let colorsArray = [];
 let normalsArray = [];
-let isToTerminate = false;
 
 // Specify the colors of faces
 let vertexColors = [
