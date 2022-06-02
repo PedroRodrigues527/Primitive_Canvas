@@ -161,7 +161,6 @@ async function init() {
         endAnimation();
     }
 
-    //TODO: OTHER ONCLICK BUTTONS
     // * MANIPULATE OBJECT SECTION *
     document.getElementById("btn-apply-transformation").onclick = function () {
         applyTransformation();
@@ -179,10 +178,37 @@ async function init() {
             document.getElementById("btn-load-texture-manipulate").innerText='Carregar Textura';
         }
     }
+    document.getElementById("btn-remove").onclick = function () {
+        removeObject();
+    }
 
     // *** Render ***
     render();
 
+}
+
+function removeObject()
+{
+    let typeObject = document.getElementById("object-type-manipulation").options[document.getElementById("object-type-manipulation").selectedIndex].text;
+
+    if(typeObject.length !== 0) {
+        if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular "))
+        {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            primitivesArray.splice(parseInt(indexElement),1);
+            updateOptionsSelect("REMOVE PRIMITIVE " + typeObject);
+        }
+        else if (typeObject.includes("Modelo "))
+        {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            modelsArray.splice(parseInt(indexElement),1);
+            updateOptionsSelect("REMOVE MODEL " + typeObject);
+        }
+        else
+            return -1;
+    }
+    else
+        return -1;
 }
 
 function applyTransformation(){
@@ -725,6 +751,11 @@ function render() {
 }
 
 function configureTexture(image) {
+    if(counter >= 31)
+    {
+        alert("Chegou o limite maximo (32) de texturas inseridas e/ou alteradas.");
+        return -1;
+    }
     let texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -1042,6 +1073,71 @@ function updateOptionsSelect(typeObject)
         for (let i = options.length - 1; i >= 0; i--) {
             options.remove(i);
             options2.remove(i);
+        }
+    }
+    else if(typeObject.includes("REMOVE PRIMITIVE "))
+    {
+        let primitiveRemoved = typeObject.substring("REMOVE PRIMITIVE ".length);
+        let j = 0;
+
+        for(j; j < options.length; j++)
+        {
+            if(options[j].text === primitiveRemoved)
+            {
+                options.remove(j);
+                options2.remove(j);
+                break;
+            }
+        }
+
+        for(let i = j; i < options.length; i++)
+        {
+            if(options[i].text.includes("Cubo "))
+            {
+                let indexGotten = options[i].text.substring(options[i].text.length - 1);
+                let updatedIndex = parseInt(indexGotten) - 1;
+                options[i].text = "Cubo " + updatedIndex;
+                options[i].id = "Cubo " + updatedIndex;
+                options2[i].text = "Cubo " + updatedIndex;
+                options2[i].id = "Cubo " + updatedIndex;
+            }
+            else if(options[i].text.includes("Pir\u00E2mide triangular "))
+            {
+                let indexGotten = options[i].text.substring(options[i].text.length - 1);
+                let updatedIndex = parseInt(indexGotten) - 1;
+                options[i].text = "Pir\u00E2mide triangular " + updatedIndex;
+                options[i].id = "Pir\u00E2mide triangular " + updatedIndex;
+                options2[i].text = "Pir\u00E2mide triangular " + updatedIndex;
+                options2[i].id = "Pir\u00E2mide triangular " + updatedIndex;
+            }
+        }
+    }
+    else if(typeObject.includes("REMOVE MODEL "))
+    {
+        let primitiveRemoved = typeObject.substring("REMOVE MODEL ".length);
+        let j = 0;
+
+        for(j; j < options.length; j++)
+        {
+            if(options[j].text === primitiveRemoved)
+            {
+                options.remove(j);
+                options2.remove(j);
+                break;
+            }
+        }
+
+        for(let i = j; i < options.length; i++)
+        {
+            if(options[i].text.includes("Modelo "))
+            {
+                let indexGotten = options[i].text.substring(options[i].text.length - 1);
+                let updatedIndex = parseInt(indexGotten) - 1;
+                options[i].text = "Modelo " + updatedIndex;
+                options[i].id = "Modelo " + updatedIndex;
+                options2[i].text = "Modelo " + updatedIndex;
+                options2[i].id = "Modelo " + updatedIndex;
+            }
         }
     }
     else
