@@ -219,9 +219,43 @@ function applyTransformation(){
         else
             return -1;
     }
+    if(translationX.length !== 0 && translationY.length !== 0 && translationZ.length !== 0) {
+        if (typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular ")) {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            let primitiveElement = primitivesArray[indexElement];
+            primitiveElement.translation.x = parseFloat(translationX) / 100;
+            primitiveElement.translation.y = parseFloat(translationY) / 100;
+            primitiveElement.translation.z = parseFloat(translationZ) / 100;
 
-    //inserir translação aqui copy paste da implementação do scale
+            // *** Apply transformations ***
+            mat4.translate(ctm, ctm, [primitiveElement.translation.x, primitiveElement.translation.y, primitiveElement.translation.z]);
 
+            // *** Transfer the information to the model viewer ***
+            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+            // *** Draw the triangles ***
+            gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+        }
+        else if(typeObject.includes("Modelo "))
+        {
+            let indexElement = typeObject.substring(typeObject.length - 1);
+            let modelElement = modelsArray[indexElement];
+            modelElement.translation.x = parseFloat(translationX) / 100;
+            modelElement.translation.y = parseFloat(translationY) / 100;
+            modelElement.translation.z = parseFloat(translationZ) / 100;
+
+            // *** Apply transformations ***
+            mat4.translate(ctm, ctm, [modelElement.translation.x, modelElement.translation.y, modelElement.translation.z]);
+
+            // *** Transfer the information to the model viewer ***
+            gl.uniformMatrix4fv(modelViewMatrix, false, ctm);
+
+            // *** Draw the triangles ***
+            gl.drawArrays(gl.TRIANGLES, 0, modelElement.data.position.length / 3);
+        }
+        else
+            return -1;
+    }
 }
 
 
