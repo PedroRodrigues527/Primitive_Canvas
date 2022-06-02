@@ -740,16 +740,13 @@ function applyLighting()
 }
 function endAnimation(){
     let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
-    let rotationX = 0;
-    let rotationY = 0;
-    let rotationZ = 0;
         if(typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular "))
         {
             let indexElement = typeObject.substring(typeObject.length - 1);
             let primitiveElement = primitivesArray[indexElement];
-            primitiveElement.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
-            primitiveElement.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
-            primitiveElement.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
+            primitiveElement.rotation.x = 0;
+            primitiveElement.rotation.y = 0;
+            primitiveElement.rotation.z = 0;
 
             primitiveElement.currentRotation.x += primitiveElement.rotation.x;
             primitiveElement.currentRotation.y += primitiveElement.rotation.y;
@@ -768,9 +765,9 @@ function endAnimation(){
         {
             let indexElement = typeObject.substring(typeObject.length - 1);
             let modelElement = modelsArray[indexElement];
-            modelElement.rotation.x = parseFloat(rotationX) * (Math.PI / 180);
-            modelElement.rotation.y = parseFloat(rotationY) * (Math.PI / 180);
-            modelElement.rotation.z = parseFloat(rotationZ) * (Math.PI / 180);
+            modelElement.rotation.x = 0
+            modelElement.rotation.y = 0
+            modelElement.rotation.z = 0
 
             modelElement.currentRotation.x += modelElement.rotation.x;
             modelElement.currentRotation.y += modelElement.rotation.y;
