@@ -69,7 +69,11 @@ function parseOBJ(text) {
         [],   // texcoords
         [],   // normals
     ];
-
+    /**
+     * Responsible for the verification of an existing geometry and possibility of starting a new one.
+     * @constructor
+     *
+     */
     function newGeometry() {
         // If there is an existing geometry and it's
         // not empty then start a new one.
@@ -78,7 +82,11 @@ function parseOBJ(text) {
         }
         setGeometry();
     }
-
+    /**
+     * Obtains the vertice of specified positions, coordinates of texture and the norms of the module.
+     * @constructor
+     * @param {float} vert - specified vertice
+     */
     function addVertex(vert) {
         const ptn = vert.split('/');
         ptn.forEach((objIndexStr, i) => {
@@ -139,7 +147,11 @@ function parseOBJ(text) {
         normal: webglVertexData[2],
     };
 }
-
+/**
+     * Responsible for the normalization
+     * @constructor
+     * @param {Float} points - specified array
+     */
 function normalize(points){
     var min = points[0];
     var max = points[1];
