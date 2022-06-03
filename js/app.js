@@ -948,7 +948,12 @@ function prepareModel(model)
     // *** Draw the triangles ***
     gl.drawArrays(gl.TRIANGLES, 0, model.data.position.length / 3);
 }
-
+/**
+     * Responsible for specified creation of the object
+     * @constructor
+     * @param {String} modelchosen - specified model
+     * @param {String} textureChosen - specified texture
+     */
 async function createObject(modelChosen, textureChosen)
 {
     if(modelsArray.length < MAX_MODELS) {
@@ -1021,7 +1026,10 @@ async function createObject(modelChosen, textureChosen)
         alert("Maximum number of models reached!");
     }
 }
-
+/**
+     * Responsible for application of the light in a 3 dimensional space
+     * @constructor
+     */
 function applyLighting()
 {
     let typeLight = document.getElementById("light-type").value;
@@ -1048,6 +1056,10 @@ function applyLighting()
         return -1;
     }
 }
+/**
+     * Responsible for the animation of the Object, meaning possible rotation of the module.
+     * @constructor
+     */
 function endAnimation(){
     let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
         if(typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular "))
@@ -1095,7 +1107,10 @@ function endAnimation(){
         else
             return -1;
 }
-
+/**
+     * Responsible for the animation of the Object, meaning possible rotation of the module.
+     * @constructor
+     */
 function startAnimation()
 {
     let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
@@ -1152,7 +1167,11 @@ function startAnimation()
     else
         return -1;
 }
-
+/**
+     * Responsible for the Options Menu for the according Objects
+     * @constructor
+     * @param {String} typeObject - specified object
+     */
 function updateOptionsSelect(typeObject)
 {
     let options = document.getElementById('object-type').options;
