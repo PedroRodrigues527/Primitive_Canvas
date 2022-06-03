@@ -42,7 +42,10 @@ let step = 0.1;
 window.onload = function () {
     init();
 }
-
+/**
+     * Responsible for the initialization of the program
+     * @constructor
+     */
 async function init() {
 
     // *** Get canvas ***
@@ -262,7 +265,10 @@ async function init() {
     render();
 
 }
-
+/**
+     * Responsible for the removal of the Object accordingly to the specified implementation
+     * @constructor
+     */
 function removeObject()
 {
     let typeObject = document.getElementById("object-type-manipulation").options[document.getElementById("object-type-manipulation").selectedIndex].text;
@@ -286,7 +292,10 @@ function removeObject()
     else
         return -1;
 }
-
+/**
+     * Responsible for the Scalization and translation of the module.
+     * @constructor
+     */
 function applyTransformation(){
     let typeObject = document.getElementById("object-type-manipulation").options[document.getElementById("object-type-manipulation").selectedIndex].text;
     let scalingX = document.getElementById("scaling-x").value;
@@ -437,7 +446,10 @@ function applyTransformation(){
         return -1;
 }
 
-
+/**
+     * Responsible for the implementation of a 6-sides cube.
+     * @constructor
+     */
 function cube() {
 
     // Specify the coordinates to draw
@@ -572,7 +584,10 @@ function cube() {
     ]
 
 }
-
+/**
+     * Responsible for the creation of a triangular Pyramid(4-sides)
+     * @constructor
+     */
 function triangularPyramid() {
 
     // Specify the coordinates to draw
@@ -633,7 +648,11 @@ function triangularPyramid() {
     ]
 
 }
-
+/**
+     * Responsible for the preparation of the specified primitive
+     * @constructor
+     * @param {Float} primitive - specified object
+     */
 function preparePrimitive(primitive)
 {
     if(primitive.id === "Cubo ")
