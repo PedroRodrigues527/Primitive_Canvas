@@ -1,9 +1,19 @@
+/**
+ * Represents the Loading Resource Text
+ * @constructor
+ * @param {String} location - location for the returned text
+ */
 async function loadTextResource(location){
     var response = await fetch(location);
     const text = await response.text();
     return text;
 }
-
+/**
+ * Represents the Loading of the specified Image
+ * @constructor
+ * @param {String} location - specified location
+ * @param {} callback -
+ */
 function loadImage(location , callback){
     var image = new Image();
     image.onload = function(){
@@ -11,7 +21,12 @@ function loadImage(location , callback){
     }
     image.src = location;
 }
-
+/**
+ * Represents the Loading of JSON Resource
+ * @constructor
+ * @param {String} location - specified location
+ * @param {} callback -
+ */
 function loadJSONResource(location, callback){
     loadTextResource(location, function(result){
         try{
@@ -21,13 +36,21 @@ function loadJSONResource(location, callback){
         }
     });
 }
-
+/**
+ * Represents the Loading of the the Resource Object
+ * @constructor
+ * @param {String} location - specified location
+ */
 async function loadObjResource(location){
     const response = await fetch(location);
     const text = await response.text();
     return text;
 }
-
+/**
+ * Obtains the vertice of specified positions, coordinates of texture and the norms of the module.
+ * @constructor
+ * @param {String} location - specified location
+ */
 function parseOBJ(text) {
     // because indices are base 1 let's just fill in the 0th data
     const objPositions = [[0, 0, 0]];
@@ -40,7 +63,6 @@ function parseOBJ(text) {
         objTexcoords,
         objNormals,
     ];
-
     // same order as `f` indices
     let webglVertexData = [
         [],   // positions
