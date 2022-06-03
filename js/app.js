@@ -651,7 +651,7 @@ function triangularPyramid() {
 /**
      * Responsible for the preparation of the specified primitive
      * @constructor
-     * @param {Float} primitive - specified object
+     * @param {String} primitive - specified object
      */
 function preparePrimitive(primitive)
 {
@@ -729,7 +729,12 @@ function preparePrimitive(primitive)
     // *** Draw the triangles ***
     gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
 }
-
+/**
+     * Responsible for the creation of the primitive accordingly with the specified parameters
+     * @constructor
+     * @param {String} textureChosen - specified module
+     * @param {String} primitiveType - specified object
+     */
 function addPrimitive(textureChosen, primitiveType) {
     if(primitivesArray.length < MAX_PRIMITIVES) {
 
@@ -827,7 +832,10 @@ function addPrimitive(textureChosen, primitiveType) {
         return -1;
     }
 }
-
+/**
+     * Responsible for the renderization of the objects on the program.
+     * @constructor
+     */
 function render() {
     // Clear the canvas
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -846,7 +854,11 @@ function render() {
     // Make the new frame
     requestAnimationFrame(render);
 }
-
+/**
+     * Responsible for the configuration of the specified image into the texture
+     * @constructor
+     * @param {HTMLImageElement} image - specified HTML Element
+     */
 function configureTexture(image) {
     if(counter >= 31)
     {
@@ -864,7 +876,11 @@ function configureTexture(image) {
     gl.activeTexture(gl.TEXTURE0 + counter);
     gl.uniform1i(gl.getUniformLocation(program, "texture"), counter);
 }
-
+/**
+     * Responsible for the preparation of the model
+     * @constructor
+     * @param {JSON} model - specified object
+     */
 function prepareModel(model)
 {
     // *** Send position data to the GPU ***
