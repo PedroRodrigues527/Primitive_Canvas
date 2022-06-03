@@ -213,7 +213,7 @@ async function init() {
 
         // Read the pixels and print the result
         gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
-        gl.texImage2D
+
         let colorResult;
         if (color[0] === 255 && color[1] === 255 && color[2] === 0) {
             colorResult = "yellow";
