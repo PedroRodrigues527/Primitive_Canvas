@@ -694,7 +694,7 @@ function preparePrimitive(primitive)
 
     // *** Apply transformations ***
     mat4.scale(ctm, ctm, [primitive.scale.x, primitive.scale.y, primitive.scale.z]);
-    mat4.translate(ctm, ctm, [primitive.translation.x, primitive.translation.y, primitive.translation.z]);
+    mat4.translate(ctm, ctm, [primitive.translation.x+pos.x, primitive.translation.y+pos.y, primitive.translation.z]);
 
     // *** Rotate cube (if necessary) ***
     primitive.currentRotation.x += primitive.rotation.x;
@@ -897,7 +897,7 @@ function prepareModel(model)
 
     // *** Apply transformations ***
     mat4.scale(ctm, ctm, [model.scale.x, model.scale.y, model.scale.z]);
-    mat4.translate(ctm, ctm, [model.translation.x, model.translation.y, model.translation.z]);
+    mat4.translate(ctm, ctm, [model.translation.x+pos.x, model.translation.y+pos.y, model.translation.z]);
 
     // *** Rotate cube (if necessary) ***
     model.currentRotation.x += model.rotation.x;
