@@ -1281,7 +1281,12 @@ function updateOptionsSelect(typeObject)
     else
         return -1;
 }
-
+/**
+     * Responsible for the Options Menu for the according Objects
+     * @constructor
+     * @param {Element} option - Specified option
+     * @param {HTMLOptionsCollection} options - specified Options
+     */
 function existsOption(option, options)
 {
     for (let i = 0; i < options.length; ++i){
