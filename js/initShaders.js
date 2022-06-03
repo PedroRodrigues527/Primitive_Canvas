@@ -1,3 +1,8 @@
+/**
+ * Represents initial Shaders
+ * @constructor
+ * @param {} gl - WebGL
+ */
 async function initShaders(gl) {
     let msg;
     var vertShdr;
