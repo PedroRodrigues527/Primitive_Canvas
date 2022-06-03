@@ -64,6 +64,23 @@ async function init() {
     program = await initShaders(gl);
     gl.useProgram(program);
 
+    // *** Create a texture to attach to the off-screen framebuffer ***
+    let texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 600, 600, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.generateMipmap(gl.TEXTURE_2D);
+
+    // *** Create framebuffer for color picking ***
+    let framebuffer = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+    let status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    if (status !== gl.FRAMEBUFFER_COMPLETE) {
+        alert("Framebuffer not complete");
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
     ambientUniformLocation = gl.getUniformLocation(program, 'ambientLightIntensity');
     diffColorUniformLocation = gl.getUniformLocation(program, 'diffuse_light.color');
     diffDirectionUniformLocation = gl.getUniformLocation(program, 'diffuse_light.direction');
@@ -181,6 +198,43 @@ async function init() {
     document.getElementById("btn-remove").onclick = function () {
         removeObject();
     }
+
+    canvas.addEventListener("mousedown", event => {
+        // Render to texture with base colors
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+
+        // Get mouse position
+        let x = event.clientX;
+        let y = canvas.height - event.clientY;
+
+        let color = new Uint8Array(4);
+
+        // Read the pixels and print the result
+        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
+        let colorResult;
+        if (color[0] === 255 && color[1] === 255 && color[2] === 0) {
+            colorResult = "yellow";
+        } else if (color[0] === 0 && color[1] === 255 && color[2] === 0) {
+            colorResult = "green";
+        } else if (color[0] === 0 && color[1] === 0 && color[2] === 255) {
+            colorResult = "blue";
+        } else if (color[0] === 255 && color[1] === 0 && color[2] === 255) {
+            colorResult = "magenta";
+        } else if (color[0] === 0 && color[1] === 255 && color[2] === 255) {
+            colorResult = "cyan";
+        } else if (color[0] === 255 && color[1] === 0 && color[2] === 0) {
+            colorResult = "red";
+        }
+
+        alert(color);
+
+        // Normal render
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+    });
 
     // *** Render ***
     render();
