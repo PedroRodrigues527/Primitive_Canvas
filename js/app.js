@@ -36,6 +36,9 @@ let program;
 let model_src = "";
 let model_txt = "";
 
+let pos = { x: 0, y: 0 };
+let step = 0.1;
+
 window.onload = function () {
     init();
 }
@@ -230,11 +233,29 @@ async function init() {
         }
 
         alert(color);
+        //TODO: getElement somehow with colors (?)
 
         // Normal render
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
+    });
+    window.addEventListener('keydown', function (event)
+    {
+        if (event.code === "KeyW" || event.code === "ArrowUp") // W, Up
+            pos.y += step;
+        else if (event.code === "KeyA" || event.code === "ArrowLeft") // A, Left
+            pos.x -= step;
+        else if (event.code === "KeyS" || event.code === "ArrowDown") // S, Down
+            pos.y -= step;
+        else if (event.code === "KeyD" || event.code === "ArrowRight") // D, Right
+            pos.x += step;
+
+        event.preventDefault();
+
+        //TODO: change camera movement with addition to pos.x and pos.y
+
+
     });
 
     // *** Render ***
