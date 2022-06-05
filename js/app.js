@@ -44,7 +44,7 @@ window.onload = function () {
 }
 /**
      * Responsible for the initialization of the program
-     * @constructor
+     * @function
      */
 async function init() {
 
@@ -267,7 +267,7 @@ async function init() {
 }
 /**
      * Responsible for the removal of the Object accordingly to the specified implementation
-     * @constructor
+     * @function
      */
 function removeObject()
 {
@@ -294,7 +294,7 @@ function removeObject()
 }
 /**
      * Responsible for the Scalization and translation of the module.
-     * @constructor
+     * @function
      */
 function applyTransformation(){
     let typeObject = document.getElementById("object-type-manipulation").options[document.getElementById("object-type-manipulation").selectedIndex].text;
@@ -448,7 +448,7 @@ function applyTransformation(){
 
 /**
      * Responsible for the implementation of a 6-sides cube.
-     * @constructor
+     * @function
      */
 function cube() {
 
@@ -586,7 +586,7 @@ function cube() {
 }
 /**
      * Responsible for the creation of a triangular Pyramid(4-sides)
-     * @constructor
+     * @function
      */
 function triangularPyramid() {
 
@@ -650,7 +650,7 @@ function triangularPyramid() {
 }
 /**
      * Responsible for the preparation of the specified primitive
-     * @constructor
+     * @function
      * @param {String} primitive - specified object
      */
 function preparePrimitive(primitive)
@@ -731,7 +731,7 @@ function preparePrimitive(primitive)
 }
 /**
      * Responsible for the creation of the primitive accordingly with the specified parameters
-     * @constructor
+     * @function
      * @param {String} textureChosen - specified module
      * @param {String} primitiveType - specified object
      */
@@ -834,7 +834,7 @@ function addPrimitive(textureChosen, primitiveType) {
 }
 /**
      * Responsible for the renderization of the objects on the program.
-     * @constructor
+     * @function
      */
 function render() {
     // Clear the canvas
@@ -856,7 +856,7 @@ function render() {
 }
 /**
      * Responsible for the configuration of the specified image into the texture
-     * @constructor
+     * @function
      * @param {HTMLImageElement} image - specified HTML Element
      */
 function configureTexture(image) {
@@ -878,7 +878,7 @@ function configureTexture(image) {
 }
 /**
      * Responsible for the preparation of the model
-     * @constructor
+     * @function
      * @param {JSON} model - specified object
      */
 function prepareModel(model)
@@ -950,7 +950,7 @@ function prepareModel(model)
 }
 /**
      * Responsible for specified creation of the object
-     * @constructor
+     * @function
      * @param {String} modelchosen - specified model
      * @param {String} textureChosen - specified texture
      */
@@ -1028,7 +1028,7 @@ async function createObject(modelChosen, textureChosen)
 }
 /**
      * Responsible for application of the light in a 3 dimensional space
-     * @constructor
+     * @function
      */
 function applyLighting()
 {
@@ -1058,7 +1058,7 @@ function applyLighting()
 }
 /**
      * Responsible for the animation of the Object, meaning possible rotation of the module.
-     * @constructor
+     * @function
      */
 function endAnimation(){
     let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
@@ -1109,7 +1109,7 @@ function endAnimation(){
 }
 /**
      * Responsible for the animation of the Object, meaning possible rotation of the module.
-     * @constructor
+     * @function
      */
 function startAnimation()
 {
@@ -1169,7 +1169,7 @@ function startAnimation()
 }
 /**
      * Responsible for the Options Menu for the according Objects
-     * @constructor
+     * @function
      * @param {String} typeObject - specified object
      */
 function updateOptionsSelect(typeObject)
@@ -1283,7 +1283,7 @@ function updateOptionsSelect(typeObject)
 }
 /**
      * Responsible for the Options Menu for the according Objects
-     * @constructor
+     * @function
      * @param {Element} option - Specified option
      * @param {HTMLOptionsCollection} options - specified Options
      */
