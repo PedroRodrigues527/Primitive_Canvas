@@ -1,6 +1,6 @@
 /**
  * Represents initial Shaders
- * @constructor
+ * @function
  * @param {} gl - WebGL
  */
 async function initShaders(gl) {

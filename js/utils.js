@@ -1,6 +1,6 @@
 /**
  * Represents the Loading Resource Text
- * @constructor
+ * @function
  * @param {String} location - location for the returned text
  */
 async function loadTextResource(location){
@@ -10,7 +10,7 @@ async function loadTextResource(location){
 }
 /**
  * Represents the Loading of the specified Image
- * @constructor
+ * @function
  * @param {String} location - specified location
  * @param {} callback -
  */
@@ -23,7 +23,7 @@ function loadImage(location , callback){
 }
 /**
  * Represents the Loading of JSON Resource
- * @constructor
+ * @function
  * @param {String} location - specified location
  * @param {} callback -
  */
@@ -38,7 +38,7 @@ function loadJSONResource(location, callback){
 }
 /**
  * Represents the Loading of the the Resource Object
- * @constructor
+ * @function
  * @param {String} location - specified location
  */
 async function loadObjResource(location){
@@ -48,7 +48,7 @@ async function loadObjResource(location){
 }
 /**
  * Obtains the vertice of specified positions, coordinates of texture and the norms of the module.
- * @constructor
+ * @function
  * @param {String} location - specified location
  */
 function parseOBJ(text) {
@@ -84,7 +84,7 @@ function parseOBJ(text) {
     }
     /**
      * Obtains the vertice of specified positions, coordinates of texture and the norms of the module.
-     * @constructor
+     * @function
      * @param {float} vert - specified vertice
      */
     function addVertex(vert) {
@@ -149,7 +149,7 @@ function parseOBJ(text) {
 }
 /**
      * Responsible for the normalization
-     * @constructor
+     * @function
      * @param {Float} points - specified array
      */
 function normalize(points){
