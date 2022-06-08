@@ -43,9 +43,9 @@ window.onload = function () {
     init();
 }
 /**
-     * Responsible for the initialization of the program
-     * @function
-     */
+ * Responsible for the initialization of the program
+ * @function
+ */
 async function init() {
 
     // *** Get canvas ***
@@ -220,23 +220,7 @@ async function init() {
         // Read the pixels and print the result
         gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
 
-        let colorResult;
-        if (color[0] === 255 && color[1] === 255 && color[2] === 0) {
-            colorResult = "yellow";
-        } else if (color[0] === 0 && color[1] === 255 && color[2] === 0) {
-            colorResult = "green";
-        } else if (color[0] === 0 && color[1] === 0 && color[2] === 255) {
-            colorResult = "blue";
-        } else if (color[0] === 255 && color[1] === 0 && color[2] === 255) {
-            colorResult = "magenta";
-        } else if (color[0] === 0 && color[1] === 255 && color[2] === 255) {
-            colorResult = "cyan";
-        } else if (color[0] === 255 && color[1] === 0 && color[2] === 0) {
-            colorResult = "red";
-        }
-
         alert(color);
-        //TODO: getElement somehow with colors (?)
 
         // Normal render
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -255,10 +239,6 @@ async function init() {
             pos.x += step;
 
         event.preventDefault();
-
-        //TODO: change camera movement with addition to pos.x and pos.y
-
-
     });
 
     // *** Render ***
@@ -266,9 +246,9 @@ async function init() {
 
 }
 /**
-     * Responsible for the removal of the Object accordingly to the specified implementation
-     * @function
-     */
+ * Responsible for the removal of specified object
+ * @function
+ */
 function removeObject()
 {
     let typeObject = document.getElementById("object-type-manipulation").options[document.getElementById("object-type-manipulation").selectedIndex].text;
@@ -293,9 +273,9 @@ function removeObject()
         return -1;
 }
 /**
-     * Responsible for the Scalization and translation of the module.
-     * @function
-     */
+ * Responsible for the scaling and translation of the object picked.
+ * @function
+ */
 function applyTransformation(){
     let typeObject = document.getElementById("object-type-manipulation").options[document.getElementById("object-type-manipulation").selectedIndex].text;
     let scalingX = document.getElementById("scaling-x").value;
@@ -447,9 +427,9 @@ function applyTransformation(){
 }
 
 /**
-     * Responsible for the implementation of a 6-sides cube.
-     * @function
-     */
+ * Responsible for the implementation of a 6-sided cube.
+ * @function
+ */
 function cube() {
 
     // Specify the coordinates to draw
@@ -585,9 +565,9 @@ function cube() {
 
 }
 /**
-     * Responsible for the creation of a triangular Pyramid(4-sides)
-     * @function
-     */
+ * Responsible for the creation of a triangular pyramid (4 faces)
+ * @function
+ */
 function triangularPyramid() {
 
     // Specify the coordinates to draw
@@ -649,10 +629,10 @@ function triangularPyramid() {
 
 }
 /**
-     * Responsible for the preparation of the specified primitive
-     * @function
-     * @param {String} primitive - specified object
-     */
+ * Responsible for the preparation of specified primitive
+ * @function
+ * @param {Object} primitive - specified object
+ */
 function preparePrimitive(primitive)
 {
     if(primitive.id === "Cubo ")
@@ -730,11 +710,11 @@ function preparePrimitive(primitive)
     gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length / 3);
 }
 /**
-     * Responsible for the creation of the primitive accordingly with the specified parameters
-     * @function
-     * @param {String} textureChosen - specified module
-     * @param {String} primitiveType - specified object
-     */
+ * Responsible for the creation of the primitive with the specified parameters
+ * @function
+ * @param {String} textureChosen - specified texture
+ * @param {String} primitiveType - specified object
+ */
 function addPrimitive(textureChosen, primitiveType) {
     if(primitivesArray.length < MAX_PRIMITIVES) {
 
@@ -833,9 +813,9 @@ function addPrimitive(textureChosen, primitiveType) {
     }
 }
 /**
-     * Responsible for the renderization of the objects on the program.
-     * @function
-     */
+ * Responsible for the rendering of the objects on the program.
+ * @function
+ */
 function render() {
     // Clear the canvas
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -855,10 +835,10 @@ function render() {
     requestAnimationFrame(render);
 }
 /**
-     * Responsible for the configuration of the specified image into the texture
-     * @function
-     * @param {HTMLImageElement} image - specified HTML Element
-     */
+ * Responsible for the configuration of the specified image into the texture
+ * @function
+ * @param {HTMLImageElement} image - specified HTML Element
+ */
 function configureTexture(image) {
     if(counter >= 31)
     {
@@ -877,10 +857,10 @@ function configureTexture(image) {
     gl.uniform1i(gl.getUniformLocation(program, "texture"), counter);
 }
 /**
-     * Responsible for the preparation of the model
-     * @function
-     * @param {JSON} model - specified object
-     */
+ * Responsible for the preparation of a model
+ * @function
+ * @param {Object} model - specified object
+ */
 function prepareModel(model)
 {
     // *** Send position data to the GPU ***
@@ -948,12 +928,13 @@ function prepareModel(model)
     // *** Draw the triangles ***
     gl.drawArrays(gl.TRIANGLES, 0, model.data.position.length / 3);
 }
+
 /**
-     * Responsible for specified creation of the object
-     * @function
-     * @param {String} modelchosen - specified model
-     * @param {String} textureChosen - specified texture
-     */
+ * Responsible for specified creation of the model object
+ * @function
+ * @param {String} modelChosen - specified model
+ * @param {String} textureChosen - specified texture
+ */
 async function createObject(modelChosen, textureChosen)
 {
     if(modelsArray.length < MAX_MODELS) {
@@ -1027,9 +1008,9 @@ async function createObject(modelChosen, textureChosen)
     }
 }
 /**
-     * Responsible for application of the light in a 3 dimensional space
-     * @function
-     */
+ * Responsible for application of the light in a 3 dimensional space and/or colorization
+ * @function
+ */
 function applyLighting()
 {
     let typeLight = document.getElementById("light-type").value;
@@ -1057,9 +1038,9 @@ function applyLighting()
     }
 }
 /**
-     * Responsible for the animation of the Object, meaning possible rotation of the module.
-     * @function
-     */
+ * Responsible for the end of animation of an object chosen.
+ * @function
+ */
 function endAnimation(){
     let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
         if(typeObject.includes("Cubo ") || typeObject.includes("Pir\u00E2mide triangular "))
@@ -1108,9 +1089,9 @@ function endAnimation(){
             return -1;
 }
 /**
-     * Responsible for the animation of the Object, meaning possible rotation of the module.
-     * @function
-     */
+ * Responsible for the animation of the object chosen, with its implementation of 3d rotation.
+ * @function
+ */
 function startAnimation()
 {
     let typeObject = document.getElementById("object-type").options[document.getElementById("object-type").selectedIndex].text;
@@ -1168,10 +1149,10 @@ function startAnimation()
         return -1;
 }
 /**
-     * Responsible for the Options Menu for the according Objects
-     * @function
-     * @param {String} typeObject - specified object
-     */
+ * Responsible for the changes in Options DropDown for the list of objects in HTML
+ * @function
+ * @param {String} typeObject - specified object
+ */
 function updateOptionsSelect(typeObject)
 {
     let options = document.getElementById('object-type').options;
@@ -1282,11 +1263,12 @@ function updateOptionsSelect(typeObject)
         return -1;
 }
 /**
-     * Responsible for the Options Menu for the according Objects
-     * @function
-     * @param {Element} option - Specified option
-     * @param {HTMLOptionsCollection} options - specified Options
-     */
+ * Responsible for verifying existence of option in collection of options.
+ * @function
+ * @param {HTMLOptionElement} option - Specified option
+ * @param {HTMLOptionsCollection} options - specified collection of options
+ * @returns {boolean} True if option exists in list of options; otherwise, false.
+ */
 function existsOption(option, options)
 {
     for (let i = 0; i < options.length; ++i){
