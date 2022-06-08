@@ -12,7 +12,7 @@ async function loadTextResource(location){
  * Represents the Loading of the specified Image
  * @function
  * @param {String} location - specified location
- * @param {} callback -
+ * @param {function} callback - specified function to execute
  */
 function loadImage(location , callback){
     var image = new Image();
@@ -25,7 +25,7 @@ function loadImage(location , callback){
  * Represents the Loading of JSON Resource
  * @function
  * @param {String} location - specified location
- * @param {} callback -
+ * @param {function} callback - specified function to execute
  */
 function loadJSONResource(location, callback){
     loadTextResource(location, function(result){
@@ -37,7 +37,7 @@ function loadJSONResource(location, callback){
     });
 }
 /**
- * Represents the Loading of the the Resource Object
+ * Represents the Loading of the Resource Object
  * @function
  * @param {String} location - specified location
  */
@@ -47,9 +47,9 @@ async function loadObjResource(location){
     return text;
 }
 /**
- * Obtains the vertice of specified positions, coordinates of texture and the norms of the module.
+ * Obtains the array of specified positions coordinates, coordinates of texture and the normals of the module.
  * @function
- * @param {String} location - specified location
+ * @param {String} text - specified location
  */
 function parseOBJ(text) {
     // because indices are base 1 let's just fill in the 0th data
@@ -148,10 +148,10 @@ function parseOBJ(text) {
     };
 }
 /**
-     * Responsible for the normalization
-     * @function
-     * @param {Float} points - specified array
-     */
+ * Responsible for the adjustments of coordinates of the positions of the vertices of the object
+ * @function
+ * @param {Array} points - specified array of vertices
+ */
 function normalize(points){
     var min = points[0];
     var max = points[1];
