@@ -1,7 +1,7 @@
 /**
  * Represents initial Shaders
  * @function
- * @param {} gl - WebGL
+ * @param {WebGLRenderingContext} gl - WebGL Render Context
  */
 async function initShaders(gl) {
     let msg;
