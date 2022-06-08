@@ -1,5 +1,5 @@
 /**
- * Represents the Loading Resource Text
+ * Represents the Loading Resource text
  * @function
  * @param {String} location - location for the returned text
  */
